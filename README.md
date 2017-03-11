@@ -22,7 +22,7 @@ Flue combines the Redux single state and stateless reducers into a friendly envi
 Before taking a look at the API let's show to short example. May I introduce you to the *DummyStore*
 
 ```javascript
-import { Action, SuperStore, Store } from 'flue'
+import { Action, SuperStore, Store } from 'flue-vue'
 class DummyStore extends Store {
     constructor() {
         super()
