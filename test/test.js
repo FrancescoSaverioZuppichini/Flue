@@ -4,7 +4,7 @@ import {
     Action,
     SuperStore,
     Store
-} from './flue/flue.js'
+} from '../source/flue/flue.js'
 
 var assert = require('assert');
 
