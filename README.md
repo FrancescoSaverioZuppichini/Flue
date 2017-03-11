@@ -6,6 +6,7 @@
 ```
 npm install flue-vue
 ```
+And import in your root component. Then *$store* will be available to all components, just remember to feed the *SuperStore* with each *Store* as it is explained below.
 
 ###Motivation
 *Hey Francesco, why another flux implementation?*
