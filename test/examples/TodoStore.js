@@ -61,24 +61,24 @@ class TodoStore extends Store {
     }
     // actions takes the dispacher and the store back from the superStore,
     // so we can call our function as soon as we dispatch
-    actions(dispacher, context) {
+    actions(dispatcher, context) {
         return {
             addTodo(newTodo) {
-                dispacher.dispatch(new Action("ADD_TODO_LOADING"))
-                dispacher.dispatch(new Action("ADD_TODO_SUCCESS", {
+                dispatcher.dispatch(new Action("ADD_TODO_LOADING"))
+                dispatcher.dispatch(new Action("ADD_TODO_SUCCESS", {
                     newTodo
                 }))
             },
             displayTodoDone() {
-                dispacher.dispatch(new Action("DISPLAY_TODO_DONE"))
+                dispatcher.dispatch(new Action("DISPLAY_TODO_DONE"))
 
             },
             displayTodoNotDone() {
-                dispacher.dispatch(new Action("DISPLAY_TODO_NOT_DONE"))
+                dispatcher.dispatch(new Action("DISPLAY_TODO_NOT_DONE"))
 
             },
             displayAllTodos() {
-                dispacher.dispatch(new Action("DISPLAY_ALL_TODO"))
+                dispatcher.dispatch(new Action("DISPLAY_ALL_TODO"))
             }
         }
     }

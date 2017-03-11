@@ -1,4 +1,3 @@
-import FoodStore from './examples/FoodStore.js'
 import TodoStore from './examples/TodoStore.js'
 import {
     Action,
@@ -20,10 +19,10 @@ class DummyStore extends Store {
         })
     }
 
-    actions(dispacher, context) {
+    actions(dispatcher, context) {
         return {
             fetchDummy() {
-                dispacher.dispatch(new Action("DUMMY", { text: "dummy" }))
+                dispatcher.dispatch(new Action("DUMMY", { text: "dummy" }))
             }
         }
     }

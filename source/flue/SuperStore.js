@@ -17,14 +17,14 @@ class SuperStore extends Store {
 
     initialize() {
         this.actions = {}
-        this.dispacher = new Dispatcher()
+        this.dispatcher = new Dispatcher()
         this.state = {}
         this.vm = new Vue({
             data: {
                 state: this
             }
         })
-        this._dispachToken = this.dispacher.register(this.actionsLogger.bind(this))
+        this._dispachToken = this.dispatcher.register(this.actionsLogger.bind(this))
     }
     actionsLogger(action) {
         console.log(action)
@@ -48,9 +48,9 @@ class SuperStore extends Store {
         //override state pointer of the store with the global one -> make the store stateless
         store.state = this.state // -> is it dangerous?
         // register the store's reducer in the global dispacher
-        store._dispachToken = this.dispacher.register(store.reduce.bind(store))
+        store._dispachToken = this.dispatcher.register(store.reduce.bind(store))
         // take all the actions from the store and pass to them the dispacher and the store as a context
-        Object.assign(this.actions, store.actions(this.dispacher, store))
+        Object.assign(this.actions, store.actions(this.dispatcher, store))
         // make a ref to the superStore
         store.sStore = this
     }

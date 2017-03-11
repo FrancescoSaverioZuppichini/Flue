@@ -2,7 +2,7 @@ import {
   Action,
   SuperStore,
   Store
-} from '../../source/flue/flue.js'
+} from 'source/flue/flue.js'
 
 class FoodStore extends Store {
   constructor() {
@@ -54,12 +54,12 @@ class FoodStore extends Store {
     // }
   }
   // Store expone his actions
-  actions(dispacher) {
+  actions(dispatcher) {
     // they can be imported from some other file
     return {
       addFoodToShoppingCart(foodType) {
         // You can use action to spead up the coding
-        dispacher.dispatch(new Action("ADD_FOOD_TO_SHOPPING_CART", {
+        dispatcher.dispatch(new Action("ADD_FOOD_TO_SHOPPING_CART", {
           foodType: foodType
         }))
       },
@@ -68,12 +68,12 @@ class FoodStore extends Store {
         const action = this.createAction("REMOVE_FOOD_FROM_SHOPPING_CART", {
           foodType: foodType
         })
-        dispacher.dispatch(action)
+        dispatcher.dispatch(action)
       },
       checkOut() {
         // Since SuperStore extends Store you can also call the function from there
         const action = SuperStore.createAction("CHECK_OUT")
-        dispacher.dispatch(action)
+        dispatcher.dispatch(action)
       }
     }
   }

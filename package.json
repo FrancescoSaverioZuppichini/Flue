@@ -4,7 +4,7 @@
   "description": "",
   "main": "./distribution/flue.js",
   "scripts": {
-    "test": "webpack-dev-server 'mocha-loader!./test/test.js' --hot --inline --output-filename test.js",
+    "test": "webpack-dev-server 'mocha-loader!./test/test.js' --hot --inline --output-filename flueTest.js",
     "build": "babel ./source/flue --presets babel-preset-es2015 --out-dir distribution",
     "prepublish": "npm run build"
   },
