@@ -6,10 +6,15 @@ import Vue from 'vue'
 // create the unique superstore
 const SuperStore = new SS()
 // make available to all components
-Vue.prototype.$store = SuperStore
+const flueVue = {
+  install(Vue, options) {
+    Vue.prototype.$store = SuperStore
+  }
+};
 
 export {
   SuperStore,
   Store,
-  Action
+  Action,
+  flueVue
 }
