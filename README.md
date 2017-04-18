@@ -58,7 +58,7 @@ Each Store must implement the **actions** function in order to return an Object 
 The function takes two parameters: dispatcher and context. The first one is the classic flux's dispatcher, the second is the Store itself. This is similar to Vuex.
 
 ###Reduce
-The other important function it the reduce, it is registered by Flue to the dispatcher. What does it? It reduced the actions. In our example:
+The other important function is the 'reduce', it is automatically registered by Flue into the dispatcher. What does it? It reduces the actions. In our example:
 
 ```
  reduce(action) {
