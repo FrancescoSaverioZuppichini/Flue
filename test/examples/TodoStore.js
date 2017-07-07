@@ -36,6 +36,7 @@ class TodoStore extends Store {
         return this.state.todos.filter(todo => todo.done)
     }
 
+
     reduce(action) {
         this.reduceMap(action, {
             ADD_TODO_SUCCESS: this.addTodo,
