@@ -30,22 +30,22 @@ class DummyStore extends Store {
         // dispatcher.dispatch(new Action("DUMMY", {text: "dummy"}))
         // ctx.dispatch("DUMMY", {text: text || "dummy"})
         ctx.dispatch(new Action("DUMMY", {text: text || "dummy"}))
-
       }
     }
   }
 }
 
 
-// const logger = ({getState}) => next => action => {
-//   console.log('-----------------')
-//   console.log('dispatching', action)
-//   let result = next(action)
-//   console.log('next state', getState())
-//   console.log('-----------------\n')
-//   return result
-// }
-//
+const logger = ({getState}) => next => action => {
+  console.log('-----------------')
+  console.log('prev state', getState())
+  console.log('dispatching', action)
+  let result = next(action)
+  console.log('next state', getState())
+  console.log('-----------------\n')
+  return result
+}
+
 
 // const checkIfIsNotDummy = store => next => (action) => {
 //   console.log('checkIfIsNotDummy')
@@ -64,6 +64,7 @@ function dummyAction(stuff) {
 }
 
 SuperStore.addStore(dummyStore)
+
 SuperStore.applyMiddleware(dummyStore,[logger])
 
 

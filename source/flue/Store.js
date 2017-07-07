@@ -1,7 +1,7 @@
 import Action from './Action.js'
 
 const StoreError = {
-  DISPATCHER_NOT_INITIALIZED: 'Dispacher must be initialize fist\nBe sure to call .addStore before call dispatch',
+  DISPATCHER_NOT_INITIALIZED: 'Dispacher must be initialize fist\nBe sure to call .addStore before call dispatch'
 }
 
 /**
@@ -16,8 +16,9 @@ class Store {
     this._dispatcher
   }
 
+  // return a copy of the current state
   getState() {
-    return this.state
+    return JSON.parse(JSON.stringify(this.state))
   }
   /**
    * This function is used to dispatch actions,

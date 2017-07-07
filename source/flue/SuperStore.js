@@ -73,6 +73,7 @@ class SuperStore extends Store {
       // make a ref to the superStore
     store.sStore = this
   }
+
   // copied from redux tutorial
   applyMiddleware(store, middlewares) {
     middlewares = middlewares.slice()
