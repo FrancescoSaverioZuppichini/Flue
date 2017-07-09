@@ -15,7 +15,7 @@ class SuperStore extends Store {
     super()
     this.initialize()
     this.middlewares = []
-    this.stores = []
+    this.stores = [this]
   }
 
   initialize() {
@@ -66,7 +66,6 @@ class SuperStore extends Store {
       const wrappedStoreWithContext = (action) => store(action, this)
       this._dispatcher.register(wrappedStoreWithContext)
     }
-
     this.stores.push(store)
     // keep a reference to the store to easy access
     this[store.constructor.name] = store
@@ -88,7 +87,8 @@ class SuperStore extends Store {
   }
 
   applyGlobalMiddlewere(middlewares) {
-
+    middlewares = middlewares.slice()
+    middlewares.reverse()
     this._applyMiddlewereToStores(this.stores, middlewares)
   }
 
@@ -101,21 +101,30 @@ class SuperStore extends Store {
       let dispatch = this.dispatch.bind(this)
       // state cannot be modified from the middleware
       const middlewareAPI = {
-        getState: store.getState.bind(store),
+        getState: this.getState.bind(this),
         dispatch: (action) => dispatch(action)
       }
-
       store.dispatch = middleware(middlewareAPI)(dispatch)
     })
   }
 
   // copied from redux tutorial -> Redux middleware can be used
-  applyMiddleware(stores, middlewares) {
-    if (stores instanceof Array)
-      this._applyMiddlewereToStores(stores, middlewares)
-    else if (stores instanceof Store)
-      this._applyMiddlewereToStore(stores, middlewares)
-    // fail
+  applyMiddleware(store, middlewares) {
+    middlewares = middlewares.slice()
+    middlewares.reverse()
+    middlewares.forEach(middleware => {
+      let dispatch = this.dispatch.bind(this)
+      // state cannot be modified from the middleware
+      const middlewareAPI = {
+        getState: this.getState.bind(this),
+        dispatch: (action) => dispatch(action)
+      }
+      store.dispatch = middleware(middlewareAPI)(dispatch)
+    })
+    // if (stores instanceof Array)
+    //   this._applyMiddlewereToStores(stores, middlewares)
+    // else if (stores instanceof Store)
+    //   this._applyMiddlewereToStore(stores, middlewares)
   }
 }
 

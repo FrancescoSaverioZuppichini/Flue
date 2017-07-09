@@ -209,10 +209,12 @@ describe('SuperStore', () => {
 
       const logger = (store) => next => action => {
         assert.ok(true)
+        console.log('Hi');
         let result = next(action)
         return result
       }
-
+      SuperStore.applyGlobalMiddlewere([logger])
+      // console.log(SuperStore.stores.length)
       SuperStore.applyMiddleware(dummyStore, [logger])
       SuperStore.actions.fetchDummy()
     })

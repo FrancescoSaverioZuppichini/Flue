@@ -39,10 +39,11 @@ class Store {
       // check if is an Action instance
     if (action instanceof Action)
       return this._dispatcher.dispatch(action)
-    // check if is a vanilla js object
-    if(typeof action == 'object')
-      if (action.type && action.payload)
-        return this._dispatcher.dispatch(action)
+      // check if is a vanilla js object
+    if (typeof action == 'object')
+      if (action.type) {
+        return this._dispatcher.dispatch(this.createAction(action.type, action.payload))
+      }
 
     throw new Error(StoreError.INVALID_ACTION)
   }
@@ -66,7 +67,7 @@ class Store {
    */
   reduceMap(action, actionFunctionMap) {
     const func = actionFunctionMap[action.type]
-    if (func && func.this !== this)
+    if (func && func.this)
       func.bind(this)(action.payload)
   }
 
