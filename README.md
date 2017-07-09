@@ -7,7 +7,19 @@
 ```
 npm install flue-vue
 ```
-And import in your root component. Then *$store* will be available to all components, just remember to feed the *SuperStore* with each *Store* as it is explained below.
+And import in your root component.
+
+```
+import {flueVue } from 'flue-vue'
+
+Vue.use(flueVue)
+
+// inside a vue component
+this.$store
+```
+
+Then *$store* will be available to all components, just remember to feed the *SuperStore* with each *Store* as it is explained below.
+
 
 ###Motivation
 *Hey Francesco, why another flux implementation?*
@@ -24,6 +36,7 @@ Before taking a look at the API let's show to short example. May I introduce you
 
 ```javascript
 import { Action, SuperStore, Store } from 'flue-vue'
+
 class DummyStore extends Store {
     constructor() {
         super()
@@ -36,10 +49,10 @@ class DummyStore extends Store {
         })
     }
 
-    actions(dispatcher, context) {
+    actions(context) {
         return {
             fetchDummy() {
-                dispatcher.dispatch(new Action("DUMMY", { text: "dummy" }))
+                context.dispatch(new Action("DUMMY", { text: "dummy" }))
             }
         }
     }
@@ -54,9 +67,27 @@ If you came from React this should look familiar. We can notice three things. Ou
 ##Store
 A store is a single logic unit that does the dirty work for the components in order to provide a meaningful API structure. A store is composed of two parts:
 ###Actions
-Each Store must implement the **actions** function in order to return an Object of actions. This special function is fetched by the **SuperStore** (wait wait) and flat into a common object in order to provide a global API interface for the components. 
+Each Store can implement the **actions** function in order to return an Object of actions. This special function is fetched by the **SuperStore** (wait wait) and flat into a common object in order to provide a global API interface for the components. 
 
-The function takes two parameters: dispatcher and context. The first one is the classic flux's dispatcher, the second is the Store itself. This is similar to Vuex.
+The context is passed to actions in order to call the store's method from the actions.
+
+Remember that you can always create a single action and dispatch it using `store.dispatch` method.
+
+```
+import {aStore} from 'aStore.js'
+
+const anAction = {type:'FOO',payload:{}} //classic way
+const anAction = new Action('FOO',{})
+const anAction = aStore.createAction('FOO',{})
+
+aStore.dispatch(anAction)
+
+//or you can use the SuperStore
+
+import {SuperStore} from 'flue-vue'
+SuperStore(anAction)
+```
+
 
 ###Reduce
 The other important function is the 'reduce', it is automatically registered by Flue into the dispatcher. What does it? It reduces the actions. In our example:
@@ -78,10 +109,21 @@ It called an helped function from the *Store* superclass in order to create and 
     }
 ```
 
+An other example:
+
+```
+this.reduceMap(action, {
+      ADD_FOOD_TO_SHOPPING_CART: this.addFoodToShoppingCart,
+      REMOVE_FOOD_FROM_SHOPPING_CART: this.removeFoodFromShoppingCart,
+      CHECK_OUT: this.checkOut
+    })
+```
+
+
 We can agree that use a function map is faster.
 
 ###What else?
-Since the Store is a class we have the power to call whatever function we want, so we can create tonnes of helpers function. In Vuex to keep the code cleaner we need to split the Store into multiple files, here we can just create others classes so the store can *delegate* the work to them. 
+Since we are using classes we can split the code, create helpers function and wather we want.
 
 ##SuperStore
 Imagine a supermarket, it contains tonnes of small shops, everyone of them does something specific like sell foods or shoes. But they are organized by the same supermarket. That's the Idea of the SuperStore. When you import Flue you automatically import also a **unique** *SuperStore* class that keep a **state** with all the store's states. In the end of our dummyStore you can see:
@@ -111,7 +153,19 @@ By doing that we can pass to each Vue components the single SuperStore instance,
 Since the Store's state is overridden by the SuperStore's one we can say that each store his stateless since it is not the owner of his state, but you can argue that this is tricky and you are right.
 
 ##Actions
-For simplicity, we provide an **Action** class in order to simplify the syntax. Each action is composed of a type and a payload. This is mandatory if you want to use the *reduceMap* since his payload object is passed to all the functions. You can always do but you want, just do not call *reduceMap* then.
+For simplicity, we provide an **Action** class in order to simplify the syntax. Each action is composed of a type and a payload. This is mandatory if you want to use the *reduceMap* since his payload object is passed to all the functions. You can always do what you want, just do not call *reduceMap* then.
+
+##Middleweres
+For convinience we used the same code Redux does, so in theory their middlewere should work since we have the same APIs. We have tried the logger as you can find in the example. To create a middlewere just follow the redux tutorial. A full example:
+
+```
+import {SuperStore} from 'flue-vue'
+import DummyStore from './DummyStore'
+import logger from 'redux-logger'
+
+SuperStore.addStore(DummyStore)
+SuperStore.applyMiddleware(DummyStore,[logger])
+```
 
 ##Example
 You can check out [here](https://github.com/FrancescoSaverioZuppichini/flueVueExample) or in the ```test/examples``` folder.

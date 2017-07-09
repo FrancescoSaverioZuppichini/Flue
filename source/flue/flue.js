@@ -3,7 +3,7 @@ import Store from './Store.js'
 import Action from './Action.js'
 import Vue from 'vue'
 
-// create the unique superstore
+// create the unique superstore singleton
 const SuperStore = new SS()
 // make available to all components
 const flueVue = {

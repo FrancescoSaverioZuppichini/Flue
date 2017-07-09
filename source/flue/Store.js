@@ -1,7 +1,8 @@
 import Action from './Action.js'
 
 const StoreError = {
-  DISPATCHER_NOT_INITIALIZED: 'Dispacher must be initialize fist\nBe sure to call .addStore before call dispatch'
+  DISPATCHER_NOT_INITIALIZED: 'Dispacher must be initialize fist\nBe sure to call .addStore before call dispatch',
+  INVALID_ACTION: 'Action must be instance of Action or object-like type'
 }
 
 /**
@@ -20,6 +21,7 @@ class Store {
   getState() {
     return JSON.parse(JSON.stringify(this.state))
   }
+
   /**
    * This function is used to dispatch actions,
    * it is a wrapper around _dispatcher.dispatch
@@ -37,15 +39,18 @@ class Store {
       // check if is an Action instance
     if (action instanceof Action)
       return this._dispatcher.dispatch(action)
-      // check if is a vanilla js object
-    if (action.type && action.payload)
-      return this._dispatcher.dispatch(action)
+    // check if is a vanilla js object
+    if(typeof action == 'object')
+      if (action.type && action.payload)
+        return this._dispatcher.dispatch(action)
+
+    throw new Error(StoreError.INVALID_ACTION)
   }
 
   // Explicit dispatch an Action instance
   dispatchAction(type, payload) {
     if (!this._dispatcher)
-      throw new 'Dispatcher must be initialize first'
+      throw new Error(StoreError.DISPATCHER_NOT_INITIALIZED)
     this._dispatcher.dispatch(this.createAction(type, payload))
   }
 
@@ -61,12 +66,12 @@ class Store {
    */
   reduceMap(action, actionFunctionMap) {
     const func = actionFunctionMap[action.type]
-    if (func)
+    if (func && func.this !== this)
       func.bind(this)(action.payload)
   }
 
   // Store always provide a reduce, even if it does not anything
-  reduce() {}
+  reduce(action) {}
 
 }
 
