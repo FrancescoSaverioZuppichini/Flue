@@ -137,9 +137,11 @@ this.reduceMap(action, {
 
 
 ###What else?
+
 Since we are using classes we can split the code, create helpers function and wather we want.
 
 ##SuperStore
+
 Imagine a supermarket, it contains tonnes of small shops, everyone of them does something specific job like sell foods or shoes, but they are organized by the same supermarket. That's the Idea of the SuperStore. When you import Flue you automatically import also a **unique** *SuperStore* class that keep a **state** with all the store's states. In the end of our dummyStore you can see:
 
 ```
@@ -170,6 +172,7 @@ this.$store.state // access the global shared state```
 ```
 
 ###Why?
+
 By doing that we can pass to each Vue components the single SuperStore instance, called for simplicity **$store**, and be able to access to all the stores, actions and state.
 
 ###Stateless
