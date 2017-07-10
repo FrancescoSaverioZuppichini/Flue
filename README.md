@@ -9,7 +9,7 @@ npm install flue-vue
 ```
 And import in your root component.
 
-```
+```javascript
 import {flueVue } from 'flue-vue'
 
 Vue.use(flueVue)
@@ -20,7 +20,7 @@ this.$store
 
 Then *$store* will be available to all components, just remember to feed the *SuperStore* with each *Store* as it is explained below.
 
-```
+```javascript
 import YourStore from './YourStore.js'
 import {SuperStore } from 'flue-vue'
 SuperStore.addStore(YourStore) // add one
@@ -66,7 +66,7 @@ class DummyStore extends Store {
 }
 
 const dummyStore = new DummyStore()
-SuperStore.addStore(dummyStore)
+export default dummyStore
 ```
 
 We can notice three things. Our *DummyStore* extends the **Store** class and we have two functions: **reduce** and **actions** (You can gess what they do).
@@ -76,7 +76,7 @@ A store is a single logic unit that does the dirty work for the components in or
 ###Actions
 Each Store can implement the **actions** function to return an Object of actions. This special function is fetched by the **SuperStore**  and flat into a common object in order to provide a global API interface for the components. Actions can be called directly from the *$store* pointer inside a component. Following our previous example:
 
-```
+```javascript
 {
 \\inside a component
 this.$store.actions.fetchDummy()
@@ -87,7 +87,7 @@ The context is passed to actions in order to call the store's method from the ac
 
 Remember that you can always create a single action and dispatch it using `store.dispatch` method.
 
-```
+```javascript
 import {aStore} from 'aStore.js'
 
 const anAction = {type:'FOO',payload:{}} //classic way
@@ -105,7 +105,7 @@ SuperStore.dispatch(anAction)
 
 ###Reduce
 The other important function is the 'reduce', it is automatically registered by Flue into the global dispatcher. What does it? It reduces the actions. It receive an action as argument and switch behavior accordently on the action's type. Usually a *switch* statement is used. In our example:
-```
+```javascript
  reduce(action) {
      switch (action.type) {
              case "DUMMY":
@@ -115,7 +115,7 @@ The other important function is the 'reduce', it is automatically registered by 
 
 We can also use a helper function, **recureMap** that create a map with actions' types and function
 
-```
+```javascript
  reduce(action) {
         this.reduceMap(action, {
             DUMMY: ({ text }) => { this.state.text = text }
@@ -125,7 +125,7 @@ We can also use a helper function, **recureMap** that create a map with actions'
 
 It makes the code faster to write. An other example:
 
-```
+```javascript
 this.reduceMap(action, {
       ADD_FOOD_TO_SHOPPING_CART: this.addFoodToShoppingCart,
       REMOVE_FOOD_FROM_SHOPPING_CART: this.removeFoodFromShoppingCart,
