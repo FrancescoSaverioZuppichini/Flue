@@ -112,7 +112,7 @@ The other important function is the 'reduce', it is automatically registered by 
     }
 ```
 
-We can also use a helper function, **recureMap** that create a map with actions' types and function
+We can also use a helper function, **reduceMap** that create a map with actions' types and function
 
 ```javascript
  reduce(action) {
