@@ -167,6 +167,7 @@ In every Vue componenets the SuperStore can be access through **$store**.
 this.$store
 this.$store.actions.something() // call an actions from a store
 this.$store.state // access the global shared state```
+```
 
 ###Why?
 By doing that we can pass to each Vue components the single SuperStore instance, called for simplicity **$store**, and be able to access to all the stores, actions and state.
