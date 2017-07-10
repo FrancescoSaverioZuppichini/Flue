@@ -171,13 +171,17 @@ this.$store.state // access the global shared state```
 
 ###Why?
 By doing that we can pass to each Vue components the single SuperStore instance, called for simplicity **$store**, and be able to access to all the stores, actions and state.
+
 ###Stateless
+
 Since the Store's state is overridden by the SuperStore's one we can say that each store his stateless since it is not the owner of his state, but you can argue that this is tricky and you are right.
 
 ##Actions
+
 For simplicity, we provide an **Action** class in order to simplify the syntax. Each action is composed of a type and a payload. This is mandatory if you want to use the *reduceMap* since his payload object is passed to all the functions. You can always do what you want, just do not call *reduceMap* then.
 
 ##Middleweres
+
 For convinience we used the same code Redux does, so in theory their middlewere should work since we have the same APIs. We have tried the logger as you can find in the example. To create a middlewere just follow the redux tutorial. A full example:
 
 ```
