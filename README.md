@@ -12,9 +12,12 @@ And import in your root component.
 import {flueVue } from 'flue-vue'
 
 Vue.use(flueVue)
-
+{
 // inside a vue component
 this.$store
+this.$store.actions.something() // call an actions from a store
+this.$store.state // access the global shared state
+}
 ```
 
 Then *$store* will be available to all components, just remember to feed the *SuperStore* with each *Store* as it is explained below.
@@ -158,6 +161,13 @@ SuperStore.state.text // access the state form the SuperStore ("text')
 SuperStore.DummyStore // this is the reference to the DummyStore, it is saved by constructor name
 dummyStore.sStore //  this is the reference to the SuperStore from the dummyStore
 ```
+In every Vue componenets the SuperStore can be access through **$store**. 
+
+```javascript
+this.$store
+this.$store.actions.something() // call an actions from a store
+this.$store.state // access the global shared state```
+
 ###Why?
 By doing that we can pass to each Vue components the single SuperStore instance, called for simplicity **$store**, and be able to access to all the stores, actions and state.
 ###Stateless
