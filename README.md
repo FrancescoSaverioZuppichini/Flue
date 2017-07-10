@@ -1,6 +1,6 @@
 
 #Flue - Flux + Vue
-##Yep, another one but with some personality
+##Yep, another flux implementatio but with personality
 
 ###Installation
 
@@ -20,16 +20,23 @@ this.$store
 
 Then *$store* will be available to all components, just remember to feed the *SuperStore* with each *Store* as it is explained below.
 
+```
+import YourStore from './YourStore.js'
+import {SuperStore } from 'flue-vue'
+SuperStore.addStore(YourStore) // add one
+SuperStore.addStores([YourStore,...]) // add multiple
+```
+
 
 ###Motivation
 *Hey Francesco, why another flux implementation?*
 
-Hi, Friend! This is why. I wanted a Flux micro framework that allows me to use *classes* and does *what I want*. Vuex is really cool, but it force you to write code with tonnes of constraints, that are there for a good reason, of course, but they limit you. So, you know that, I decided to write my own. 
+Hi, Friend! This is why. I wanted a Flux micro framework that allows me to use *classes* and does *what I want*. Vuex is really cool, but it force you to write code with tonnes of constraints. So I decided to write my own. 
 
 Let's see it together.
 
 ###Flue, what the hell is it?
-Flue combines the Redux single state and stateless reducers into a friendly environment. It uses the Vue Virtual Machine in order to automatically make "reactive" the store's state so no binding/event emitting is needed. You take it, you put in your component and it works.
+Flue combines the Redux single state paradigm and stateless reducers into a friendly environment. It uses the Vue Virtual Machine in order to automatically make "reactive" the store's state so no binding/event emitting is needed. You take it, you put in your component and it works.
 
 ###Seems cool, an example?
 Before taking a look at the API let's show to short example. May I introduce you to the *DummyStore*
@@ -62,12 +69,19 @@ const dummyStore = new DummyStore()
 SuperStore.addStore(dummyStore)
 ```
 
-If you came from React this should look familiar. We can notice three things. Our *DummyStore* extends the **Store** class and we have two functions: **reduce** and **actions** (You can gess what they do).
+We can notice three things. Our *DummyStore* extends the **Store** class and we have two functions: **reduce** and **actions** (You can gess what they do).
 
 ##Store
 A store is a single logic unit that does the dirty work for the components in order to provide a meaningful API structure. A store is composed of two parts:
 ###Actions
-Each Store can implement the **actions** function in order to return an Object of actions. This special function is fetched by the **SuperStore** (wait wait) and flat into a common object in order to provide a global API interface for the components. 
+Each Store can implement the **actions** function to return an Object of actions. This special function is fetched by the **SuperStore**  and flat into a common object in order to provide a global API interface for the components. Actions can be called directly from the *$store* pointer inside a component. Following our previous example:
+
+```
+{
+\\inside a component
+this.$store.actions.fetchDummy()
+}
+```
 
 The context is passed to actions in order to call the store's method from the actions.
 
@@ -77,7 +91,7 @@ Remember that you can always create a single action and dispatch it using `store
 import {aStore} from 'aStore.js'
 
 const anAction = {type:'FOO',payload:{}} //classic way
-const anAction = new Action('FOO',{})
+const anAction = new Action('FOO',{}) // explicit way, the payload can be remove if empty
 const anAction = aStore.createAction('FOO',{})
 
 aStore.dispatch(anAction)
@@ -85,22 +99,12 @@ aStore.dispatch(anAction)
 //or you can use the SuperStore
 
 import {SuperStore} from 'flue-vue'
-SuperStore(anAction)
+SuperStore.dispatch(anAction)
 ```
 
 
 ###Reduce
-The other important function is the 'reduce', it is automatically registered by Flue into the dispatcher. What does it? It reduces the actions. In our example:
-
-```
- reduce(action) {
-        this.reduceMap(action, {
-            DUMMY: ({ text }) => { this.state.text = text }
-        })
-    }
-```
-It called an helped function from the *Store* superclass in order to create and reduce a function map that allows us to write in a more convenient way. Every function in the map is bound again to the Store object a allow, also, not arrow function. We can still reduce in the old school way:
-
+The other important function is the 'reduce', it is automatically registered by Flue into the global dispatcher. What does it? It reduces the actions. It receive an action as argument and switch behavior accordently on the action's type. Usually a *switch* statement is used. In our example:
 ```
  reduce(action) {
      switch (action.type) {
@@ -109,7 +113,17 @@ It called an helped function from the *Store* superclass in order to create and 
     }
 ```
 
-An other example:
+We can also use a helper function, **recureMap** that create a map with actions' types and function
+
+```
+ reduce(action) {
+        this.reduceMap(action, {
+            DUMMY: ({ text }) => { this.state.text = text }
+        })
+    }
+```
+
+It makes the code faster to write. An other example:
 
 ```
 this.reduceMap(action, {
@@ -120,13 +134,11 @@ this.reduceMap(action, {
 ```
 
 
-We can agree that use a function map is faster.
-
 ###What else?
 Since we are using classes we can split the code, create helpers function and wather we want.
 
 ##SuperStore
-Imagine a supermarket, it contains tonnes of small shops, everyone of them does something specific like sell foods or shoes. But they are organized by the same supermarket. That's the Idea of the SuperStore. When you import Flue you automatically import also a **unique** *SuperStore* class that keep a **state** with all the store's states. In the end of our dummyStore you can see:
+Imagine a supermarket, it contains tonnes of small shops, everyone of them does something specific job like sell foods or shoes, but they are organized by the same supermarket. That's the Idea of the SuperStore. When you import Flue you automatically import also a **unique** *SuperStore* class that keep a **state** with all the store's states. In the end of our dummyStore you can see:
 
 ```
 SuperStore.addStore(dummyStore)
@@ -162,10 +174,12 @@ For convinience we used the same code Redux does, so in theory their middlewere 
 import {SuperStore} from 'flue-vue'
 import DummyStore from './DummyStore'
 import logger from 'redux-logger'
-
+import { apiMiddleware } from 'redux-api-middleware';
 SuperStore.addStore(DummyStore)
-SuperStore.applyMiddleware(DummyStore,[logger])
+SuperStore.applyMiddleware(DummyStore,[logger]) //apply middleware to a specific store
+SuperStore.applyGlobalMiddlewere([apiMiddleware, logger]) //apply middlewere to all the stores
 ```
+You can apply a middlewere to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middlewere to all the stores by calling **applyGlobalMiddlewere([middleweres])**.
 
 ##Example
 You can check out [here](https://github.com/FrancescoSaverioZuppichini/flueVueExample) or in the ```test/examples``` folder.

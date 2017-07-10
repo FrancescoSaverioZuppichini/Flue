@@ -73,6 +73,7 @@ class SuperStore extends Store {
     store._dispatcher = this._dispatcher
     // fetch all the store's state and put in the superStore
     for (let key in store.state) {
+      // use Vue vm to make it reactive
       Vue.set(this.state, key, store.state[key])
     }
     //override state pointer of the store with the global one -> make the store stateless
@@ -109,22 +110,14 @@ class SuperStore extends Store {
   }
 
   // copied from redux tutorial -> Redux middleware can be used
-  applyMiddleware(store, middlewares) {
+  applyMiddleware(stores, middlewares) {
     middlewares = middlewares.slice()
     middlewares.reverse()
-    middlewares.forEach(middleware => {
-      let dispatch = this.dispatch.bind(this)
-      // state cannot be modified from the middleware
-      const middlewareAPI = {
-        getState: this.getState.bind(this),
-        dispatch: (action) => dispatch(action)
-      }
-      store.dispatch = middleware(middlewareAPI)(dispatch)
-    })
-    // if (stores instanceof Array)
-    //   this._applyMiddlewereToStores(stores, middlewares)
-    // else if (stores instanceof Store)
-    //   this._applyMiddlewereToStore(stores, middlewares)
+
+    if (stores instanceof Array)
+      this._applyMiddlewereToStores(stores, middlewares)
+    else if (stores instanceof Store)
+      this._applyMiddlewereToStore(stores, middlewares)
   }
 }
 

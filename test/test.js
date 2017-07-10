@@ -9,6 +9,7 @@ class DummyStore extends Store {
   constructor() {
     super()
     this.state.text = "ciao"
+    this.actions.bind(this)
   }
 
   reduce(action) {
@@ -20,6 +21,8 @@ class DummyStore extends Store {
   }
 
   actions(ctx) {
+
+    // console.log(ctx);
     return {
       fetchDummy(text) {
         ctx.dispatch(new Action("DUMMY", {
@@ -36,6 +39,8 @@ class DummyStore extends Store {
     }
   }
 }
+
+
 
 const logger = ({getState}) => next => action => {
   console.log('-----------------')
@@ -56,7 +61,7 @@ const logger = ({getState}) => next => action => {
 
 const dummyStore = new DummyStore()
 const todoStore = new TodoStore()
-
+dummyStore.actions()
 function dummyAction(stuff) {
   return {type: 'DUMMY_ACTION', payload: {
       stuff
@@ -209,7 +214,6 @@ describe('SuperStore', () => {
 
       const logger = (store) => next => action => {
         assert.ok(true)
-        console.log('Hi');
         let result = next(action)
         return result
       }

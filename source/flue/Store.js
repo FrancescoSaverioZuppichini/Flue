@@ -67,12 +67,14 @@ class Store {
    */
   reduceMap(action, actionFunctionMap) {
     const func = actionFunctionMap[action.type]
-    if (func && func.this)
+    if (func && func.this !== this)
       func.bind(this)(action.payload)
   }
 
   // Store always provide a reduce, even if it does not anything
   reduce(action) {}
+
+  actions(){}
 
 }
 
