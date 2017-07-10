@@ -1,6 +1,6 @@
 {
   "name": "flue-vue",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "",
   "main": "./distribution/flue.js",
   "scripts": {
