@@ -71,7 +71,7 @@ const dummyStore = new DummyStore()
 export default dummyStore
 ```
 
-We can notice three things. Our *DummyStore* extends the **Store** class and we have two functions: **reduce** and **actions** (You can gess what they do).
+We can notice three things. Our *DummyStore* extends the **Store** class and we have two functions: **reduce** and **actions** (You can guess what they do).
 
 ##Store
 A store is a single logic unit that does the dirty work for the components in order to provide a meaningful API structure. A store is composed of two parts:
@@ -106,7 +106,7 @@ SuperStore.dispatch(anAction)
 
 
 ###Reduce
-The other important function is the 'reduce', it is automatically registered by Flue into the global dispatcher. What does it? It reduces the actions. It receive an action as argument and switch behavior accordently on the action's type. Usually a *switch* statement is used. In our example:
+The other important function is the 'reduce', it is automatically registered by Flue into the global dispatcher. What does it? It reduces the actions. It receives an action as argument and switch behaviour accordingly on the action's type. Usually a *switch* statement is used. In our example:
 ```javascript
  reduce(action) {
      switch (action.type) {
@@ -138,11 +138,11 @@ this.reduceMap(action, {
 
 ###What else?
 
-Since we are using classes we can split the code, create helpers function and wather we want.
+Since we are using classes we can split the code and create helpers function.
 
 ##SuperStore
 
-Imagine a supermarket, it contains tonnes of small shops, everyone of them does something specific job like sell foods or shoes, but they are organized by the same supermarket. That's the Idea of the SuperStore. When you import Flue you automatically import also a **unique** *SuperStore* class that keep a **state** with all the store's states. In the end of our dummyStore you can see:
+Imagine a supermarket, it contains tonnes of small shops, every one of them does something specific job like sell foods or shoes, but they are organised by the same supermarket. That's the Idea of the SuperStore. When you import Flue you automatically import also a **unique** *SuperStore* class that keeps a **state** with all the store's states. In the end of our dummyStore you can see:
 
 ```
 SuperStore.addStore(dummyStore)
@@ -153,9 +153,9 @@ The SuperStore class takes a **Store** instances and, in order:
 * puts the Store's actions into its actions
 * keep a reference to the Store object 
 * override the state pointer of the Store whit its state
-* puts a reference of itself into the store
+* puts a reference to itself into the store
 
-That's a lot of stuff. So what actually happens is that the single Store is put into the SuperStore, to continue with our methapore we can say that the shop is put into the supermarket. So, after called ```SuperStore.addStore(dummyStore)``` we can do the follow:
+That's a lot of stuff. So what actually happens is that the single Store is put into the SuperStore, to continue with our metaphor we can say that the shop is put into the supermarket. So, after called ```SuperStore.addStore(dummyStore)``` we can do the follow:
 
 ```
 SuperStore.actions.fetchDummy() //called action from the dummyStore
@@ -163,7 +163,7 @@ SuperStore.state.text // access the state form the SuperStore ("text')
 SuperStore.DummyStore // this is the reference to the DummyStore, it is saved by constructor name
 dummyStore.sStore //  this is the reference to the SuperStore from the dummyStore
 ```
-In every Vue componenets the SuperStore can be access through **$store**. 
+In every Vue components the SuperStore can be accessed through **$store**. 
 
 ```javascript
 this.$store
@@ -177,7 +177,7 @@ By doing that we can pass to each Vue components the single SuperStore instance,
 
 ###Stateless
 
-Since the Store's state is overridden by the SuperStore's one we can say that each store his stateless since it is not the owner of his state, but you can argue that this is tricky and you are right.
+Since the Store's state is overridden by the SuperStore's one we can say that each store is stateless since it is not the owner of his state, but you can argue that this is tricky and you are right.
 
 ##Actions
 
@@ -185,7 +185,7 @@ For simplicity, we provide an **Action** class in order to simplify the syntax. 
 
 ##Middleweres
 
-For convinience we used the same code Redux does, so in theory their middlewere should work since we have the same APIs. We have tried the logger as you can find in the example. To create a middlewere just follow the redux tutorial. A full example:
+For convinience we used the same code Redux does, so in theory their middleware should work since we have the same APIs. We have tried the logger as you can find in the example. To create a middleware just follow the redux tutorial. A full example:
 
 ```
 import {SuperStore} from 'flue-vue'
@@ -194,9 +194,9 @@ import logger from 'redux-logger'
 import { apiMiddleware } from 'redux-api-middleware';
 SuperStore.addStore(DummyStore)
 SuperStore.applyMiddleware(DummyStore,[logger]) //apply middleware to a specific store
-SuperStore.applyGlobalMiddlewere([apiMiddleware, logger]) //apply middlewere to all the stores
+SuperStore.applyGlobalMiddlewere([apiMiddleware, logger]) //apply middleware to all the stores
 ```
-You can apply a middlewere to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middlewere to all the stores by calling **applyGlobalMiddlewere([middleweres])**.
+You can apply a middleware to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middleware to all the stores by calling **applyGlobalMiddlewere([middleweres])**.
 
 ##Example
 You can check out [here](https://github.com/FrancescoSaverioZuppichini/flueVueExample) or in the ```test/examples``` folder.
