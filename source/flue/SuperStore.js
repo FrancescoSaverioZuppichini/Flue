@@ -1,4 +1,3 @@
-import Dispatcher from './PromiseDispatcher.js'
 import Vue from 'vue'
 import Store from './Store.js'
 
@@ -13,36 +12,30 @@ const SuperStoreError = {
 class SuperStore extends Store {
   constructor() {
     super()
-    this.initialize()
     this.middlewares = []
-    this.stores = [this]
-  }
-
-  initialize() {
     this.actions = {}
-    this._dispatcher = new Dispatcher()
-    this.state = {}
-    // start a Vue vm to make the global state reactive
-    this.vm = new Vue({
-      data: {
-        state: this
-      }
-    })
-
-    this._registerStoreToDispatcher(this)
+    this.stores = [this]
+    this.initialize()
   }
 
   addStores(arrayOfStores) {
     arrayOfStores.forEach(store => this.addStore(store))
   }
 
-  addActions(actionsProvider, store) {
-    // pass env
-    const actions = actionsProvider(store)
-    // copy ref to this store
+  _copyActionsRefs(actions) {
     for (let key in actions) {
       this.actions[key] = actions[key]
     }
+  }
+
+  addActions(actionProvider) {
+    const actions = actionProvider(this)
+    this._copyActionsRefs(actions)
+  }
+
+  addActionsFromStore(store) {
+    const actions = store.actions(store)
+    this._copyActionsRefs(actions)
   }
 
   _registerStoreToDispatcher(store) {
@@ -66,6 +59,7 @@ class SuperStore extends Store {
       const wrappedStoreWithContext = (action) => store(action, this)
       this._dispatcher.register(wrappedStoreWithContext)
     }
+
     this.stores.push(store)
     // keep a reference to the store to easy access
     this[store.constructor.name] = store
@@ -78,26 +72,15 @@ class SuperStore extends Store {
     }
     //override state pointer of the store with the global one -> make the store stateless
     store.state = this.state // -> is it dangerous?
-    // register the store's reducer in the global dispacher
     // check if store exposes actions
     if (typeof store.actions == 'function')
       // take all the actions from the store and pass to them the dispatcher and the store itself as a context
-      this.addActions(store.actions, store)
+      this.addActionsFromStore(store)
       // make a ref to the superStore
     store.sStore = this
   }
 
-  applyGlobalMiddlewere(middlewares) {
-    middlewares = middlewares.slice()
-    middlewares.reverse()
-    this._applyMiddlewereToStores(this.stores, middlewares)
-  }
-
-  _applyMiddlewereToStores(stores, middlewares) {
-    stores.forEach(store => this._applyMiddlewereToStore(store, middlewares))
-  }
-
-  _applyMiddlewereToStore(store, middlewares) {
+  _applyMiddlewareToStore(store, middlewares) {
     middlewares.forEach(middleware => {
       let dispatch = this.dispatch.bind(this)
       // state cannot be modified from the middleware
@@ -109,15 +92,25 @@ class SuperStore extends Store {
     })
   }
 
+  _applyMiddlewareToStores(stores, middlewares) {
+    stores.forEach(store => this._applyMiddlewareToStore(store, middlewares))
+  }
+
+  applyGlobalMiddleware(middlewares) {
+    middlewares = middlewares.slice()
+    middlewares.reverse()
+    this._applyMiddlewareToStores(this.stores, middlewares)
+  }
+
   // copied from redux tutorial -> Redux middleware can be used
   applyMiddleware(stores, middlewares) {
     middlewares = middlewares.slice()
     middlewares.reverse()
 
     if (stores instanceof Array)
-      this._applyMiddlewereToStores(stores, middlewares)
+      this._applyMiddlewareToStores(stores, middlewares)
     else if (stores instanceof Store)
-      this._applyMiddlewereToStore(stores, middlewares)
+      this._applyMiddlewareToStore(stores, middlewares)
   }
 }
 

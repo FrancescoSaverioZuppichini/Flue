@@ -135,6 +135,14 @@ this.reduceMap(action, {
     })
 ```
 
+###Subscribe
+For convenience is it possible to subscribe for updates in any store. Since we are using an promise base dispatcher, then also async operations are support and the listeners will be called at the right time. 
+
+```
+SuperStore.subscribe((store)=>{console.log(store.state)}) \\subscribe to the global store
+DummyStore.subscribe((store)=>{console.log(store.state)} \\subscribe to a specific store
+
+```
 
 ###What else?
 
@@ -194,9 +202,9 @@ import logger from 'redux-logger'
 import { apiMiddleware } from 'redux-api-middleware';
 SuperStore.addStore(DummyStore)
 SuperStore.applyMiddleware(DummyStore,[logger]) //apply middleware to a specific store
-SuperStore.applyGlobalMiddlewere([apiMiddleware, logger]) //apply middlewere to all the stores
+SuperStore.applyGlobalMiddleware([apiMiddleware, logger]) //apply middlewere to all the stores
 ```
-You can apply a middlewere to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middlewere to all the stores by calling **applyGlobalMiddlewere([middleweres])**.
+You can apply a middlewere to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middlewere to all the stores by calling **applyGlobalMiddleware([middleweres])**.
 
 ##Example
 You can check out [here](https://github.com/FrancescoSaverioZuppichini/flueVueExample) or in the ```test/examples``` folder.

@@ -5,11 +5,39 @@ import logger from 'redux-logger'
 
 var assert = require('assert');
 
+class HelloWorld extends Store {
+  constructor() {
+    super()
+    this.state.text = ""
+  }
+
+  reduce(action) {
+    switch (action.type) {
+      case 'HELLO_WORLD':
+        this.state.text = action.payload.text
+        break;
+      default:
+
+    }
+    // this.reduceMap(action, {
+    //   'HELLO_WORLD': ({text}) => this.state.text = text
+    // })
+  }
+  actions(ctx) {
+    return {
+      helloWorld() {
+        ctx.dispatchAction('HELLO_WORLD', {text: 'Hello World'})
+      }
+    }
+  }
+}
+
+const helloWorldStore = new HelloWorld()
+
 class DummyStore extends Store {
   constructor() {
     super()
     this.state.text = "ciao"
-    this.actions.bind(this)
   }
 
   reduce(action) {
@@ -21,8 +49,6 @@ class DummyStore extends Store {
   }
 
   actions(ctx) {
-
-    // console.log(ctx);
     return {
       fetchDummy(text) {
         ctx.dispatch(new Action("DUMMY", {
@@ -40,7 +66,12 @@ class DummyStore extends Store {
   }
 }
 
+const testReducer = (action) => {
+  console.log(action)
+}
 
+SuperStore.addStore(testReducer)
+SuperStore.addStore(helloWorldStore)
 
 const logger = ({getState}) => next => action => {
   console.log('-----------------')
@@ -61,26 +92,45 @@ const logger = ({getState}) => next => action => {
 
 const dummyStore = new DummyStore()
 const todoStore = new TodoStore()
-dummyStore.actions()
+
 function dummyAction(stuff) {
   return {type: 'DUMMY_ACTION', payload: {
       stuff
     }}
 }
 
+
+const apiActionProvider = (ctx) => {
+  return {
+    getMeFromAPI() {
+      ctx.dispatch(new Action("GET_ME_FROM_API"))
+    }
+  }
+}
+
+const actionProvider = (ctx) => {
+  return {
+    testActionsProvider() {
+      ctx.dispatch(new Action("TEST_ACTION_PROVIDER"))
+    }
+  }
+}
+
+SuperStore.addActions(actionProvider)
 // SuperStore.addStore((action,context)=>{console.log('asddas',context)})
 
-SuperStore.applyMiddleware(dummyStore, [logger])
+// SuperStore.applyMiddleware(dummyStore, [logger])
+SuperStore.applyGlobalMiddleware([logger])
+SuperStore.actions.helloWorld()
+SuperStore.actions.testActionsProvider()
 
-const randomActions = (dispatcher, ctx) => {
+const randomActions = ({ctx}) => {
   return {
     randomAction() {
       console.log('randomAction')
     }
   }
 }
-
-const randomAction = new Action('RANDOM')
 
 describe('Action', () => {
   describe("Create a new Action", () => {
@@ -112,7 +162,7 @@ describe('Store', function() {
   describe('dispatch', function() {
     it('should dispatch an Action Instance', function() {
       try {
-        SuperStore.dispatch(randomAction)
+        SuperStore.dispatch(new Action('TEST'))
       } catch (e) {
         assert.ok(false)
       } finally {
@@ -217,10 +267,23 @@ describe('SuperStore', () => {
         let result = next(action)
         return result
       }
-      SuperStore.applyGlobalMiddlewere([logger])
+      SuperStore.applyGlobalMiddleware([logger])
       // console.log(SuperStore.stores.length)
       SuperStore.applyMiddleware(dummyStore, [logger])
       SuperStore.actions.fetchDummy()
+    })
+  })
+  describe("subscribe", () => {
+    it("should trigger a change when an action is distpached", () => {
+
+      const func = () => {
+        assert.ok(true)
+        console.log('s')
+      }
+
+      const unsubscribe = SuperStore.subscribe(func)
+      SuperStore.actions.fetchDummy()
+
     })
   })
 })
