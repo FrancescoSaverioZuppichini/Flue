@@ -202,15 +202,10 @@ import logger from 'redux-logger'
 import { apiMiddleware } from 'redux-api-middleware';
 SuperStore.addStore(DummyStore)
 SuperStore.applyMiddleware(DummyStore,[logger]) //apply middleware to a specific store
-<<<<<<< HEAD
 SuperStore.applyGlobalMiddleware([apiMiddleware, logger]) //apply middlewere to all the stores
 ```
-You can apply a middlewere to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middlewere to all the stores by calling **applyGlobalMiddleware([middleweres])**.
-=======
-SuperStore.applyGlobalMiddlewere([apiMiddleware, logger]) //apply middleware to all the stores
-```
-You can apply a middleware to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middleware to all the stores by calling **applyGlobalMiddlewere([middleweres])**.
->>>>>>> cd66bdde2703922b3c533acc64d6c40967feaf48
+
+You can apply a middleware to a specific store or to an array of stores by calling **applyMiddleware(store/[stores],[middleweres])**. Or you can apply a global middleware to all the stores by calling **applyGlobalMiddleware([middleweres])**.
 
 ##Example
 You can check out [here](https://github.com/FrancescoSaverioZuppichini/flueVueExample) or in the ```test/examples``` folder.
