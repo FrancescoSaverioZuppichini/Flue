@@ -15,7 +15,8 @@ class SuperStore extends Store {
     this.middlewares = []
     this.actions = {}
     this.stores = [this]
-    this.initialize()
+    this.initializeDispatcher()
+    this.createVueVM()
   }
 
   addStores(arrayOfStores) {

@@ -31,16 +31,18 @@ class Store {
    */
   initialize() {
     this.initializeDispatcher()
+    this.createVueVM()
+    this._dispatcher.register(this.reduce)
+  }
+
+  createVueVM() {
     // start a Vue vm to make the state reactive
     this.vm = new Vue({
       data: {
         state: this
       }
     })
-
-    this._dispatcher.register(this.reduce)
   }
-
   initializeDispatcher() {
     this._dispatcher = new Dispatcher()
   }
