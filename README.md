@@ -58,10 +58,12 @@ class DummyStore extends Store {
         })
     }
 
-    actions: (context) => {
-        fetchDummy () {
+    actions(context) {
+        return {
+            fetchDummy () {
             context.dispatch(new Action('DUMMY', { text: 'dummy' }))
-        },
+            },
+        }
     }
 }
 
