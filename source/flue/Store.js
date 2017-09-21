@@ -9,13 +9,12 @@ const StoreError = {
 }
 
 /**
- * The Store class is the basic state container
+ * A Store is the basic state container,
  * it provides a reference to the global dispatcher,
  * the shared state  
  * and a way to dispatch and reduce actions.
- * It has not the ability to dispatch actions at its creation
- * but it can dynamically become self-sufficient. 
- * It must be added to the SuperStore by calling .addStore or .addStores
+ * It must be added to the SuperStore by calling [.addStore](SuperStore.html#addStore)
+ *  or [.addStores](SuperStore.html#addStores)
  * @type {Object}
  */
 class Store {
