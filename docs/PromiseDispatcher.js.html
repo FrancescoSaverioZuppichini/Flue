@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PromiseDispatcher.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Action.html">Action</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Store.html">Store</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#actions">actions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#createAction">createAction</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#dispatch">dispatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#getState">getState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#initialize">initialize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#reduce">reduce</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#reduceMap">reduceMap</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#subscribe">subscribe</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="SuperStore.html">SuperStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addActions">addActions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addActionsFromStore">addActionsFromStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addProvider">addProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addReducer">addReducer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addStore">addStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addStores">addStores</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyGlobalMiddleware">applyGlobalMiddleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyMiddlewareToStore">applyMiddlewareToStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyMiddlewareToStores">applyMiddlewareToStores</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#flueVue">flueVue</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#Promise">Promise</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">PromiseDispatcher.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Dispatcher
+ *
+ * The dispatcher is a centralized registry of callbacks. Callbacks are
+ * registered (typically by data stores) so that they can receive data from
+ * other parts of the application (typically views and controller views). The
+ * dispatcher responds to an action by receiving a payload of data and sending
+ * it to every callback in the registry.
+ *
+ * The dispatcher can also manage dependencies between callbacks by allowing
+ * them to wait for other callbacks to finish.
+ *
+ * Based on Facebook's todomvc-flux example project
+ * https://github.com/facebook/react/blob/master/examples/todomvc-flux/js/dispatcher/Dispatcher.js
+ */
+
+var Promise = Promise || require('es6-promise').Promise;
+
+class Dispatcher {
+
+  constructor() {
+    // Callbacks added via `register()`
+    this._callbacks = [];
+
+    // Array of promises to be populated and cleared on each dispatch
+    this._promises = [];
+    this._isDispatching = false
+    this._readyPromise;
+  }
+
+  /**
+   * Register a callback with the dispatcher.
+   * @param {Function} callback - The callback to be registered.
+   * @returns {Integer} The index of the callback within the _callbacks array.
+   */
+  register(callback) {
+    this._callbacks.push(callback);
+    return this._callbacks.length - 1; // index
+  }
+
+  /**
+   * Dispatch a payload of data to every registered callback
+   * @param {Object} payload - The data to be dispatched._readyPromise
+   * @returns {Promise} A promise that resolves when all the callbacks
+   *                    have completed. Resolves to the value of the payload.
+   */
+  dispatch(payload) {
+    this._isDispatching = true;
+
+    // Create array of resolve and reject callbacks corresponding to `_promises`
+    var resolves = [];
+    var rejects = [];
+
+    // Populate `_promises` with "empty" promises corresponding to each
+    // callback. Promises are created before callbacks are invoked so that
+    // waitFor() can reference them regardless of callback order.
+    this._promises = this._callbacks.map(function(_, i) {
+      return new Promise(function(resolve, reject) {
+        resolves[i] = resolve;
+        rejects[i] = reject;
+      });
+    });
+
+    // Now that the promises have been created, we can dispatch the payload
+    // to the callbacks
+    this._callbacks.forEach(function(callback, i) {
+      // Callbacks can return either an object, to resolve, or a promise, to
+      // chain. To normalize the response, we wrap it in a promise object and
+      // immediately resolve it using Promise.resolve(). The next part is a bit
+      // confusing: we then resolve the promise from the `_promises` array,
+      // using the resolves and rejects we saved above. Note that these are two
+      // different promises we're dealing with.
+
+      // Wrap the response from the callback in a promise
+      Promise.resolve(callback(payload))
+        // Resolve or reject promise from `promises` array
+        .then(function() {
+          resolves[i](payload)
+        })['catch'](function(error) {
+          rejects[i](error);
+        });
+    });
+
+    // Return a promise that resolves when all the callbacks have completed.
+    return this._readyPromise = Promise.all(this._promises)
+      .then(function() {
+        return payload;
+      });
+  }
+
+  /**
+   * Wait for the specified registered callbacks to complete. This only works
+   * called within the body of a registered callback.
+   *
+   * If no callback is passed, a promise is returned.
+   *
+   * @param {Array&lt;Integers>} promiseIndices - The indices of promises to
+   *                                           wait for.
+   * @param {Function} [callback] - A callback to invoke on completion.
+   * @returns {Promise} A promise that resolves when the selected callbacks
+   *                    have completed.
+   */
+  waitFor(promiseIndices, callback) {
+    var selectedPromises = promiseIndices.map((index) => {
+      return this._promises[index];
+    });
+
+    var combinedPromise = Promise.all(selectedPromises);
+
+    if (typeof callback === 'undefined') {
+      return combinedPromise;
+    } else {
+      return combinedPromise.then(callback);
+    }
+  }
+}
+
+export default Dispatcher;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Sep 21 2017 12:59:37 GMT+0200 (CEST) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

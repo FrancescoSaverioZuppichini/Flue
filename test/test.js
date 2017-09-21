@@ -23,6 +23,7 @@ class HelloWorld extends Store {
     //   'HELLO_WORLD': ({text}) => this.state.text = text
     // })
   }
+
   actions(ctx) {
     return {
       helloWorld() {
@@ -70,26 +71,6 @@ const testReducer = (action) => {
   console.log(action)
 }
 
-SuperStore.addStore(testReducer)
-SuperStore.addStore(helloWorldStore)
-
-const logger = ({getState}) => next => action => {
-  console.log('-----------------')
-  console.log('prev state', getState())
-  console.log('dispatching', action)
-  let result = next(action)
-  console.log('next state', getState())
-  console.log('-----------------\n')
-  return result
-}
-
-// const checkIfIsNotDummy = store => next => (action) => {
-//   console.log('checkIfIsNotDummy')
-//   console.log(action);
-//   if(action.payload.text != 'dummy') return next(action)
-//   console.log('NO DUMMY ')
-// }
-
 const dummyStore = new DummyStore()
 const todoStore = new TodoStore()
 
@@ -100,34 +81,10 @@ function dummyAction(stuff) {
 }
 
 
-const apiActionProvider = (ctx) => {
-  return {
-    getMeFromAPI() {
-      ctx.dispatch(new Action("GET_ME_FROM_API"))
-    }
-  }
-}
-
 const actionProvider = (ctx) => {
   return {
     testActionsProvider() {
       ctx.dispatch(new Action("TEST_ACTION_PROVIDER"))
-    }
-  }
-}
-
-SuperStore.addActions(actionProvider)
-// SuperStore.addStore((action,context)=>{console.log('asddas',context)})
-
-// SuperStore.applyMiddleware(dummyStore, [logger])
-SuperStore.applyGlobalMiddleware([logger])
-SuperStore.actions.helloWorld()
-SuperStore.actions.testActionsProvider()
-
-const randomActions = ({ctx}) => {
-  return {
-    randomAction() {
-      console.log('randomAction')
     }
   }
 }
@@ -224,7 +181,6 @@ describe('SuperStore', () => {
   describe("addStore", () => {
     it("should add a Store to itself", () => {
       SuperStore.addStore(dummyStore)
-      assert.equal(SuperStore.DummyStore, dummyStore)
       assert.equal(SuperStore.state.text, dummyStore.state.text)
       assert.ok(SuperStore.this === dummyStore.sSuper)
       assert.notEqual(dummyStore._dispachToken, null)
@@ -235,9 +191,25 @@ describe('SuperStore', () => {
       const todoStore = new TodoStore()
       const testStore2 = new Store()
 
+      const lengthOfStoresBeforeAdd = SuperStore.stores.length
+
       SuperStore.addStores([todoStore, testStore2])
-      assert.equal(SuperStore.TodoStore, todoStore)
-      // assert.equal(SuperStore.TestStore2, testStore2)
+
+      const lengthOfStoresAfterAdd = SuperStore.stores.length
+
+      assert.ok(lengthOfStoresBeforeAdd < lengthOfStoresAfterAdd)
+    })
+  })
+  describe("addReducer", () => {
+    it("should add a reduce function to itself", () => {
+      const lengthOfStoresBeforeAdd = SuperStore.stores.length
+      
+      SuperStore.addReducer((action) => {})
+     
+      const lengthOfStoresAfterAdd = SuperStore.stores.length
+      
+      assert.ok(lengthOfStoresBeforeAdd < lengthOfStoresAfterAdd)
+      
     })
   })
   describe("actions", () => {
@@ -246,11 +218,8 @@ describe('SuperStore', () => {
       // SuperStore.addStore(dummyStore)
       // console.log(SuperStore)
       SuperStore.actions.fetchDummy()
-      SuperStore.actions.fetchDummy()
-      SuperStore.actions.fetchDummy()
-
       assert.equal(SuperStore.state.text, "dummy")
-      // console.log(SuperStore.state)
+
     })
     it("should dispatch an async action and change the state", () => {
       SuperStore.actions.fetchDummyAsync('async')
@@ -268,8 +237,7 @@ describe('SuperStore', () => {
         return result
       }
       SuperStore.applyGlobalMiddleware([logger])
-      // console.log(SuperStore.stores.length)
-      SuperStore.applyMiddleware(dummyStore, [logger])
+      SuperStore.applyMiddlewareToStore(dummyStore, [logger])
       SuperStore.actions.fetchDummy()
     })
   })
@@ -287,56 +255,3 @@ describe('SuperStore', () => {
     })
   })
 })
-
-// describe("TodoStore", () => {
-//   describe("addTodo", () => {
-//     it("should add a new todo to the state", () => {
-//       const newTodo = {
-//         done: false,
-//         text: "hey"
-//       }
-//       SuperStore.actions.addTodo(newTodo)
-//       assert.ok(SuperStore.state.todos.length == 1)
-//       assert.equal(SuperStore.state.todos[0], newTodo)
-//     })
-//   })
-//
-//   describe("displayTodoNotDone", () => {
-//     it("should display all todo not done", () => {
-//
-//       const newTodo = {
-//         done: true,
-//         text: "hey"
-//       }
-//       SuperStore.actions.addTodo(newTodo)
-//       assert.ok(SuperStore.state.todos.length == 2)
-//       assert.equal(SuperStore.state.todos[0].text, newTodo.text)
-//       SuperStore.actions.displayTodoNotDone()
-//       assert.ok(todoStore.getAllTodoNotDone().length == 1)
-//
-//     })
-//   })
-//   describe("displayTodoDone", () => {
-//     it("should display all todo not done", () => {
-//       assert.ok(SuperStore.state.todos.length == 2)
-//       SuperStore.actions.displayTodoDone()
-//       assert.ok(todoStore.getAllTodoDone().length == 1)
-//
-//     })
-//   })
-//   describe("displayAllTodos", () => {
-//     it("should display all todos, done and not done", () => {
-//       const newTodo = {
-//         done: true,
-//         text: "hey"
-//       }
-//       SuperStore.actions.addTodo(newTodo)
-//       assert.ok(SuperStore.state.todos.length == 3)
-//       SuperStore.actions.displayAllTodos()
-//       for (let todo of SuperStore.state.todos) {
-//         assert.ok(todo.display)
-//       }
-//
-//     })
-//   })
-// })

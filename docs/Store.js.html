@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Store.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Action.html">Action</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Store.html">Store</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#actions">actions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#createAction">createAction</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#dispatch">dispatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#getState">getState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#initialize">initialize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#reduce">reduce</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#reduceMap">reduceMap</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#subscribe">subscribe</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="SuperStore.html">SuperStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addActions">addActions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addActionsFromStore">addActionsFromStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addProvider">addProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addReducer">addReducer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addStore">addStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addStores">addStores</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyGlobalMiddleware">applyGlobalMiddleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyMiddlewareToStore">applyMiddlewareToStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyMiddlewareToStores">applyMiddlewareToStores</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#flueVue">flueVue</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#Promise">Promise</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Store.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Action from './Action.js'
+import Dispatcher from './PromiseDispatcher.js'
+import Vue from 'vue'
+
+const StoreError = {
+  DISPATCHER_NOT_INITIALIZED: 'Dispacher must be initialize fist\nBe sure to call .addStore before call dispatch',
+  INVALID_ACTION: 'Action must be instance of Action or object-like type',
+  INVALID_SUBSCRIBER: 'Subcribers must be functions'
+}
+
+/**
+ * The Store class is the basic state container
+ * it provides a reference to the global dispatcher,
+ * the shared state  
+ * and a way to dispatch and reduce actions.
+ * It has not the ability to dispatch actions at its creation
+ * but it can dynamically become self-sufficient. 
+ * It must be added to the SuperStore by calling .addStore or .addStores
+ * @type {Object}
+ */
+class Store {
+  constructor(initialState = {}) {
+    this.state = initialState
+    this._dispatcher = null
+    this.listeners = []
+  }
+
+  /**
+   * Runtime initialization of the dispatcher
+   * and the vm. At any point a store can become self-sufficient
+   * by calling this function. The global dispatcher will be override
+   * with the stores' local one and a Vue vm will be spawned to handle
+   * the state reactivity
+   *
+   */
+  initialize() {
+    this._dispatcher = new Dispatcher()    
+    this._dispatcher.register(this.reduce)
+    this.createVueVM()    
+  }
+
+   // start a Vue vm to make the state reactive
+   createVueVM() {
+    this.vm = new Vue({
+      data: {
+        state: this
+      }
+    })
+  }
+
+  /**
+   * Get the current state
+   * 
+   * @return {Object} A copy of the current state
+   */
+  getState() {
+    return JSON.parse(JSON.stringify(this.state))
+  }
+
+  /**
+   * This function let the user subscribe to the state changing. 
+   * Example: 
+   * 
+   * ```javascript
+   * var unsubscribe = Store.subscribe(subscribeFunction)
+   * unsubscribe()
+   * ```
+   * 
+   * @param {Function} func A callback that will be called everytime the state is changed
+   * @return {Function} A unsubscribe function.
+   */
+  subscribe(func) {
+    if (typeof func != 'function')
+      throw new Error(StoreError.INVALID_SUBSCRIBER)
+
+    this.listeners.push(func)
+    // return a unsubscribe function
+    return () => this.listeners.splice(this.listeners.indexOf(func), 1)
+  }
+
+  notify() {
+    this.listeners.forEach(listener => listener(this))
+  }
+
+  /**
+   * This function is used to dispatch actions,
+   * it is a wrapper around _dispatcher.dispatch
+   * in order to provide more options to the client
+   * @param  {Object} action Action instance, or an Action-like vanilla object
+   */
+  dispatch(action) {
+    if (!this._dispatcher)
+      throw new Error(StoreError.DISPATCHER_NOT_INITIALIZED)
+    // nothing to dispatch
+    if (!action)
+      return
+    // check if is an Action instance
+    if (action instanceof Action) {
+      return this._dispatcher.dispatch(action).then(() => this.notify())
+    }
+    // check if is a vanilla js object
+    if (typeof action == 'object')
+      // the type is required in order to identify the action
+      if (action.type) {
+        return this._dispatcher.dispatch(action).then(() => this.notify())
+      }
+    
+    throw new Error(StoreError.INVALID_ACTION)
+  }
+
+  /**
+   * This function can be called in order to create a Action instance
+   * without have to import Action from Flue
+   * 
+   * @param {String} type The type of the action
+   * @param {Object} payload The payload of the action
+   * 
+   * @return {Action} A newly created Action instance
+   */
+  createAction(type, payload) {
+    return new Action(type, payload)
+  }
+
+  /**
+   * Map each action to the correct function.
+   * 
+   * Example:
+   * 
+   * ```javascript
+   * this.reduceMap(action, {
+   *  ADD_FOOD_TO_SHOPPING_CART: this.addFoodToShoppingCart,
+   *  REMOVE_FOOD_FROM_SHOPPING_CART: this.removeFoodFromShoppingCart,
+   *  CHECK_OUT: this.checkOut
+   * })
+   * ```
+   * 
+   * @param  {Object} action            A action
+   * @param  {Object} actionFunctionMap A dictionary with action type as key and function as value
+   * @param {String} payloadKey        The key to access to the data part of an Action
+   */
+  reduceMap(action, actionFunctionMap, payloadKey = 'payload') {
+    const func = actionFunctionMap[action.type]
+    if (func &amp;&amp; func.this !== this)
+      func.bind(this)(action[payloadKey])
+  }
+
+  /**
+   * The reduce function takes a action as input and reduce it
+   * by switching behavior based on its type
+   * 
+   * @param {Object} action A action instance
+   */
+  reduce(action) {}
+  /**
+   * The store may expose a object of function that can be called
+   * in order to dispatch Actions.
+   * 
+   * @param {Store} context The store itself is passed as context
+   */
+  actions(context) {}
+
+}
+
+export default Store
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Sep 21 2017 12:59:37 GMT+0200 (CEST) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

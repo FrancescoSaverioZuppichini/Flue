@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Action.html">Action</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Store.html">Store</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#actions">actions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#createAction">createAction</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#dispatch">dispatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#getState">getState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#initialize">initialize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#reduce">reduce</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#reduceMap">reduceMap</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Store.html#subscribe">subscribe</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="SuperStore.html">SuperStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addActions">addActions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addActionsFromStore">addActionsFromStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addProvider">addProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addReducer">addReducer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addStore">addStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#addStores">addStores</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyGlobalMiddleware">applyGlobalMiddleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyMiddlewareToStore">applyMiddlewareToStore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="SuperStore.html#applyMiddlewareToStores">applyMiddlewareToStores</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#flueVue">flueVue</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#Promise">Promise</a></span></li>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>Flue - Flux + Vue</h1><h2>Yep, another flux implementatio but with personality</h2><p>by Francesco Saverio Zuppichini</p>
+<pre class="prettyprint source lang-javascript"><code>import { Action, SuperStore, Store } from 'flue-vue'
+
+class WelcomeToFlue extends Store {
+    constructor () {
+        super()
+        this.state.hasSaidWelcome = false
+    }
+
+    reduce (action) {
+        this.reduceMap(action, {
+            SAY_WELCOME_TO_FLUE: ( ) => { this.state.hasSaidWelcome = true }
+        })
+    }
+
+    actions(context) {
+        return {
+            sayWelcomeToFlue() {
+             context.dispatch(new Action('SAY_WELCOME_TO_FLUE'))
+            },
+        }
+    }
+}
+
+const dummyStore = new DummyStore()
+
+SuperStore.addStore(dummyStore)
+
+SuperStore.actions.sayWelcomeToFlue()
+
+console.log(SuperStore.state.hasSaidWelcome) // true</code></pre><h3>Installation</h3><pre class="prettyprint source lang-bash"><code>npm install flue-vue</code></pre><p>Then you can import it in your root component.</p>
+<pre class="prettyprint source lang-javascript"><code>import { flueVue } from 'flue-vue'
+
+Vue.use(flueVue)
+
+export default {
+    // inside a vue component
+    this.$store
+    this.$store.actions.something() // call an actions from a store
+    this.$store.state // access the global shared state
+}</code></pre><p>Then <em>$store</em> will be available to any component, inside using instance, just remember to feed the <em>SuperStore</em> with each <em>Store</em> as it is explained below.</p>
+<pre class="prettyprint source lang-javascript"><code>import YourStore from './YourStore.js'
+import { SuperStore } from 'flue-vue'
+SuperStore.addStore(YourStore) // add one
+SuperStore.addStores([YourStore, ...]) // add multiple</code></pre><h3>Motivation</h3><blockquote>
+<p>Hey Francesco, why another flux implementation?</p>
+</blockquote>
+<p>Hi, Friend! This is why. I wanted a Flux micro framework that allows me to use <em>classes</em> and does <em>what I want</em>. Vuex is really cool, but it force you to write code with tonnes of constraints. So I decided to write my own. </p>
+<p>Let's see it together.</p>
+<h3>Flue, what the hell is it?</h3><p>Flue combines the Redux single state paradigm and stateless reducers into a friendly environment. It uses the Vue Virtual Machine in order to automatically make &quot;reactive&quot; the store's state so no binding/event emitting is needed. You take it, you put in your component and it works.</p>
+<h3>Seems cool, an example?</h3><p>Before taking a look at the API let's show to short example. May I introduce you to the <em>DummyStore</em></p>
+<pre class="prettyprint source lang-javascript"><code>import { Action, SuperStore, Store } from 'flue-vue'
+
+class DummyStore extends Store {
+    constructor () {
+        super()
+        this.state.text = ''
+    }
+
+    reduce (action) {
+        this.reduceMap(action, {
+            DUMMY: ({ text }) => { this.state.text = text }
+        })
+    }
+
+    actions(context) {
+        return {
+            fetchDummy () {
+            context.dispatch(new Action('DUMMY', { text: 'dummy' }))
+            },
+        }
+    }
+}
+
+const dummyStore = new DummyStore()
+
+export default dummyStore</code></pre><p>We can notice three things. Our <em>DummyStore</em> extends the <strong>Store</strong> class and we have two functions: <strong>reduce</strong> and <strong>actions</strong> (You can guess what they do).</p>
+<h2>Store</h2><p>A store is a single logic unit that does the dirty work for the components in order to provide a meaningful API structure. A store is composed of two parts:</p>
+<h3>Actions</h3><p>Each Store can implement the <strong>actions</strong> function to return an Object of actions. This special function is fetched by the <strong>SuperStore</strong>  and flat into a common object in order to provide a global API interface for the components. Actions can be called directly from the <em>$store</em> pointer inside a component. Following our previous example:</p>
+<pre class="prettyprint source lang-javascript"><code>export default {
+    \\inside a component
+    this.$store.actions.fetchDummy()
+}</code></pre><p>The context is passed to actions in order to call the store's method from the actions.</p>
+<p>Remember that you can always create a single action and dispatch it using <code>store.dispatch()</code> method.</p>
+<pre class="prettyprint source lang-javascript"><code>import { aStore } from 'aStore.js'
+
+const anAction = { type: 'FOO', payload: {} } // the classic way
+const anAction = new Action('FOO', {}) // the explicit way, when the payload can be removed if it is empty
+const anAction = aStore.createAction('FOO', {})
+
+aStore.dispatch(anAction)
+
+//or you can use the SuperStore
+
+import { SuperStore } from 'flue-vue'
+
+SuperStore.dispatch(anAction)</code></pre><h3>Reduce</h3><p>The other important function is the 'reduce', it is automatically registered by Flue into the global dispatcher. What does it? It reduces the actions. It receives an action as argument and switch behaviour accordingly on the action's type. Usually a <em>switch</em> statement is used. In our example:</p>
+<pre class="prettyprint source lang-javascript"><code>reduce (action) {
+    switch (action.type) {
+    case 'DUMMY':
+         ....
+    }
+}</code></pre><p>We can also use a helper function, <strong>reduceMap</strong> that create a map with an actions types and function</p>
+<pre class="prettyprint source lang-javascript"><code>reduce (action) {
+    this.reduceMap(action, {
+        DUMMY: ({ text }) => { this.state.text = text }
+    })
+}</code></pre><p>It makes the code faster to write. An other example:</p>
+<pre class="prettyprint source lang-javascript"><code>this.reduceMap(action, {
+    ADD_FOOD_TO_SHOPPING_CART: this.addFoodToShoppingCart,
+    REMOVE_FOOD_FROM_SHOPPING_CART: this.removeFoodFromShoppingCart,
+    CHECK_OUT: this.checkOut
+})</code></pre><h3>Subscribe</h3><p>For convenience is it possible to subscribe for updates in any store. Since we are using an promise base dispatcher, then also async operations are support and the listeners will be called at the right time. </p>
+<pre class="prettyprint source lang-javascript"><code>SuperStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to the global store
+
+DummyStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a specific store</code></pre><h3>What else?</h3><p>Since we are using classes we can split the code and create helpers function.</p>
+<h2>SuperStore</h2><p>The SuperStore is the container for all stores. In order to add one you need to call the <code>.addStore</code> or the <code>.addStores</code> function. After that, the global state will be available to all the stores as well as the actions exposed.</p>
+<pre class="prettyprint source lang-javascript"><code>SuperStore.addStore(dummyStore)
+
+SuperStore.actions.fetchDummy() // called action from the dummyStore
+SuperStore.state.text // access the state form the SuperStore ('text')
+SuperStore.DummyStore // this is the reference to the DummyStore, it is saved by constructor name
+dummyStore.sStore // this is the reference to the SuperStore from the dummyStore</code></pre><p>In the each of Vue component the SuperStore can be accessed through <strong>$store</strong>. </p>
+<pre class="prettyprint source lang-javascript"><code>this.$store
+this.$store.actions.something() // call an actions from a store
+this.$store.state // access the global shared state
+this.$store.flue // reference to the SuperStore</code></pre><h3>Why?</h3><p>By doing that we can pass to each Vue components the single SuperStore instance, called for simplicity <strong>$store</strong>, and be able to access to all the stores, actions and state.</p>
+<h3>Stateless</h3><p>Since the Store's state is overridden by the SuperStore's one we can say that each store is stateless since it is not the owner of his state, but you can argue that this is tricky and you are right.</p>
+<h2>Actions</h2><p>For simplicity, we provide an <strong>Action</strong> class in order to simplify the syntax. Each action is composed of a type and a payload. This is mandatory if you want to use the <em>reduceMap</em> since his payload object is passed to all the functions. You can always do what you want, just do not call <em>reduceMap</em> then.</p>
+<h2>Middleweres</h2><p>For convinience we used the same code Redux does, so in theory their middleware should work since we have the same APIs. We have tried the logger as you can find in the example. To create a middleware just follow the redux tutorial. A full example:</p>
+<pre class="prettyprint source lang-javascript"><code>import { SuperStore } from 'flue-vue'
+import DummyStore from './DummyStore'
+import logger from 'redux-logger'
+import { apiMiddleware } from 'redux-api-middleware'
+SuperStore.addStore(DummyStore)
+SuperStore.applyMiddlewareToStore(DummyStore, [logger]) // apply middleware to a specific store
+SuperStore.applyMiddlewareToStores([DummyStore, AnOtherStore] [logger]) // apply middleware to some stores
+SuperStore.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all the stores</code></pre><p>You can apply a middleware to a specific store or to an array of stores by calling <strong><code>applyMiddleware(store/[stores],[middleweres])</code></strong>. Or you can apply a global middleware to all the stores by calling <strong><code>applyGlobalMiddleware([middleweres])</code></strong>.</p>
+<p>##Providers
+It may be usefull to directly inject some third part packaged in the <code>SuperStore</code>. For example, imagine we are using <code>axios</code> to make our AJAX call, then it would be convinient to store a reference to it in order to be accessed from all the stores. This can be done by using the <code>.addProvider</code> function.</p>
+<pre class="prettyprint source lang-javascript"><code>import { SuperStore } from 'flue-vue'
+import axios from 'axios'
+
+SuperStore.addProvider({ key: 'client', source: axios })
+
+SuperStore.providers.client.get(...) // will call axios.get(...)</code></pre><p>Inside a Store</p>
+<pre class="prettyprint source lang-javascript"><code>class SomeStore extends Store {
+    ...
+    this.providers.client.get() // will call axios.get(...)
+    ...
+}</code></pre><h2>Example</h2><p>You can check out <a href="https://github.com/FrancescoSaverioZuppichini/flueVueExample">here</a> or in the <strong><code>test/examples</code></strong> folder.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Sep 21 2017 12:59:37 GMT+0200 (CEST) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
