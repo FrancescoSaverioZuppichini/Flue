@@ -1,8 +1,8 @@
 import {
     Action,
-    SuperStore,
+    flue,
     Store
-} from '../../source/flue/flue.js'
+} from '../../source/flue/index.js'
 
 class TodoStore extends Store {
     constructor() {

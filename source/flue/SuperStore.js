@@ -7,6 +7,8 @@ const SuperStoreError = {
   STORE_ALREADY_ADDED: (name) => `Store ${name} was already added`
 }
 /**
+ * "One to rule them all"
+ * 
  * This class is the top-level store. It manages all the state and stores in order to dispatch actions.
  * It can be see as a container for all the stores.
  */
@@ -16,7 +18,7 @@ class SuperStore extends Store {
     this.middlewares = []
     this.actions = {}
     this.providers = {}
-    this.stores = [this]
+    this.stores = []
     this.initialize()
   }
 
@@ -42,8 +44,8 @@ class SuperStore extends Store {
    *  }
    * }
    * 
-   * SuperStore.addActions(actionProvider)
-   * SuperStore.actions.testActionsProvider()
+   * superStore.addActions(actionProvider)
+   * superStore.actions.testActionsProvider()
    * 
    * ```
    * @param {Function} actionProvider
@@ -107,7 +109,10 @@ class SuperStore extends Store {
     // take all the actions from the store and pass to them the dispatcher and the store itself as a context
     this.addActionsFromStore(store)
     // make a ref to the superStore
-    store.flue = this    
+    store.flue = this  
+    store.sStore = this    
+    store.$store = this    
+    
     // also directly store providers to fast access
     store.providers = this.providers
     // save the store
@@ -120,7 +125,7 @@ class SuperStore extends Store {
    * Example:
    * 
    * var reducer = (action) => { console.log(action.type) }
-   * SuperStore.addReducer(reducer)
+   * superStore.addReducer(reducer)
    * 
    * @param {Function} reducer 
    */
@@ -178,16 +183,16 @@ class SuperStore extends Store {
 
   /**
    * It may be convinient to add some external package
-   * directly into the SuperStore in order to make it
+   * directly into flue in order to make it
    * available from all the stores and components.
    * Example:
    * 
    * ```javascript
    * import axios from 'axios'
    * 
-   * SuperStore.addProvider({ key: 'client', source: axios })
+   * flue.addProvider({ key: 'client', source: axios })
    * 
-   * SuperStore.providers.client.get(...)
+   * flue.providers.client.get(...)
    * ```
    * 
    * @param {Object} provider A provider.
@@ -198,4 +203,6 @@ class SuperStore extends Store {
   
 }
 
-export default SuperStore
+const flue = new SuperStore()
+
+export default flue

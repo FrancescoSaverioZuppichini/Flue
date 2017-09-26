@@ -1,8 +1,8 @@
 import {
   Action,
-  SuperStore,
+  flye,
   Store
-} from 'source/flue/flue.js'
+} from 'source/flue/index.js'
 
 class FoodStore extends Store {
   constructor() {

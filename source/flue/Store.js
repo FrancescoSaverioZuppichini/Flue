@@ -13,7 +13,10 @@ const StoreError = {
  * it provides a reference to the global dispatcher,
  * the shared state  
  * and a way to dispatch and reduce actions.
- * It must be added to the SuperStore by calling [.addStore](SuperStore.html#addStore)
+ * 
+ * It represent one stand-alone source of true.
+ * 
+ * *Remember*: It must be added to the SuperStore by calling [.addStore](SuperStore.html#addStore)
  *  or [.addStores](SuperStore.html#addStores)
  * @type {Object}
  */
@@ -30,7 +33,6 @@ class Store {
    * by calling this function. The global dispatcher will be override
    * with the stores' local one and a Vue vm will be spawned to handle
    * the state reactivity
-   *
    */
   initialize() {
     this._dispatcher = new Dispatcher()    
@@ -105,6 +107,16 @@ class Store {
       }
     
     throw new Error(StoreError.INVALID_ACTION)
+  }
+
+  /**
+   * Explicity create and dispatch an Action type
+   * 
+   * @param {String} type The type of the action
+   * @param {Object} payload The payload of the action
+   */
+  dispatchAction(type, payload){
+    this.dispatch(this.createAction(type,payload))
   }
 
   /**

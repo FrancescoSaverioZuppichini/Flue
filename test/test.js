@@ -1,5 +1,5 @@
 import TodoStore from './examples/TodoStore.js'
-import {Action, SuperStore, Store} from '../source/flue/flue.js'
+import {Action, flue, Store} from '../source/flue/index.js'
 
 import logger from 'redux-logger'
 
@@ -119,7 +119,7 @@ describe('Store', function() {
   describe('dispatch', function() {
     it('should dispatch an Action Instance', function() {
       try {
-        SuperStore.dispatch(new Action('TEST'))
+        flue.dispatch(new Action('TEST'))
       } catch (e) {
         assert.ok(false)
       } finally {
@@ -129,7 +129,7 @@ describe('Store', function() {
     });
     it('should dispatch an Action object-like', function() {
       try {
-        SuperStore.dispatch({type: 'RANDOM', payload: {}})
+        flue.dispatch({type: 'RANDOM', payload: {}})
       } catch (e) {
         assert.ok(false)
       } finally {
@@ -140,7 +140,7 @@ describe('Store', function() {
     it('should not dispatch an wrong Action', function() {
       var failed = false
       try {
-        SuperStore.dispatch('asdas')
+        flue.dispatch('asdas')
       } catch (e) {
         failed = true
       } finally {
@@ -150,7 +150,7 @@ describe('Store', function() {
       failed = false
 
       try {
-        SuperStore.dispatch()
+        flue.dispatch()
       } catch (e) {
         failed = true
       } finally {
@@ -158,7 +158,7 @@ describe('Store', function() {
       }
 
       try {
-        SuperStore.dispatch(null)
+        flue.dispatch(null)
       } catch (e) {
         failed = true
       } finally {
@@ -166,7 +166,7 @@ describe('Store', function() {
       }
 
       try {
-        SuperStore.dispatch({})
+        flue.dispatch({})
       } catch (e) {
         failed = true
       } finally {
@@ -177,12 +177,12 @@ describe('Store', function() {
   });
 });
 
-describe('SuperStore', () => {
+describe('flue', () => {
   describe("addStore", () => {
     it("should add a Store to itself", () => {
-      SuperStore.addStore(dummyStore)
-      assert.equal(SuperStore.state.text, dummyStore.state.text)
-      assert.ok(SuperStore.this === dummyStore.sSuper)
+      flue.addStore(dummyStore)
+      assert.equal(flue.state.text, dummyStore.state.text)
+      assert.ok(flue.this === dummyStore.sSuper)
       assert.notEqual(dummyStore._dispachToken, null)
     })
   })
@@ -191,22 +191,22 @@ describe('SuperStore', () => {
       const todoStore = new TodoStore()
       const testStore2 = new Store()
 
-      const lengthOfStoresBeforeAdd = SuperStore.stores.length
+      const lengthOfStoresBeforeAdd = flue.stores.length
 
-      SuperStore.addStores([todoStore, testStore2])
+      flue.addStores([todoStore, testStore2])
 
-      const lengthOfStoresAfterAdd = SuperStore.stores.length
+      const lengthOfStoresAfterAdd = flue.stores.length
 
       assert.ok(lengthOfStoresBeforeAdd < lengthOfStoresAfterAdd)
     })
   })
   describe("addReducer", () => {
     it("should add a reduce function to itself", () => {
-      const lengthOfStoresBeforeAdd = SuperStore.stores.length
+      const lengthOfStoresBeforeAdd = flue.stores.length
       
-      SuperStore.addReducer((action) => {})
+      flue.addReducer((action) => {})
      
-      const lengthOfStoresAfterAdd = SuperStore.stores.length
+      const lengthOfStoresAfterAdd = flue.stores.length
       
       assert.ok(lengthOfStoresBeforeAdd < lengthOfStoresAfterAdd)
       
@@ -214,17 +214,17 @@ describe('SuperStore', () => {
   })
   describe("actions", () => {
     it("should dispatch an action and change the state", () => {
-      // SuperStore.initialize()
-      // SuperStore.addStore(dummyStore)
-      // console.log(SuperStore)
-      SuperStore.actions.fetchDummy()
-      assert.equal(SuperStore.state.text, "dummy")
+      // flue.initialize()
+      // flue.addStore(dummyStore)
+      // console.log(flue)
+      flue.actions.fetchDummy()
+      assert.equal(flue.state.text, "dummy")
 
     })
     it("should dispatch an async action and change the state", () => {
-      SuperStore.actions.fetchDummyAsync('async')
+      flue.actions.fetchDummyAsync('async')
       setTimeout(() => {
-        assert.equal(SuperStore.state.text, "async")
+        assert.equal(flue.state.text, "async")
       }, 1100)
     })
   })
@@ -236,9 +236,9 @@ describe('SuperStore', () => {
         let result = next(action)
         return result
       }
-      SuperStore.applyGlobalMiddleware([logger])
-      SuperStore.applyMiddlewareToStore(dummyStore, [logger])
-      SuperStore.actions.fetchDummy()
+      flue.applyGlobalMiddleware([logger])
+      flue.applyMiddlewareToStore(dummyStore, [logger])
+      flue.actions.fetchDummy()
     })
   })
   describe("subscribe", () => {
@@ -249,8 +249,8 @@ describe('SuperStore', () => {
         console.log('s')
       }
 
-      const unsubscribe = SuperStore.subscribe(func)
-      SuperStore.actions.fetchDummy()
+      const unsubscribe = flue.subscribe(func)
+      flue.actions.fetchDummy()
 
     })
   })

@@ -1,5 +1,5 @@
 import TodoStore from './examples/TodoStore.js'
-import {Action, SuperStore, Store} from '../source/flue/flue.js'
+import {Action, flue, Store} from '../source/flue/index.js'
 
 import logger from 'redux-logger'
 
@@ -28,10 +28,10 @@ class TestStore extends Store {
 const testStore  = new TestStore()
 
 
-SuperStore.addStore(testStore)
+flue.addStore(testStore)
 
-SuperStore.addReducer((action)=>{console.log('Hello from reducer!')})
+flue.addReducer((action)=>{console.log('Hello from reducer!')})
 
-SuperStore.actions.changeState()
+flue.actions.changeState()
 
-console.log(SuperStore.state.text);
+console.log(flue.state.text);

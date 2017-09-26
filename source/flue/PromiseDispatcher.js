@@ -1,20 +1,20 @@
-/**
- * Dispatcher
- *
- * The dispatcher is a centralized registry of callbacks. Callbacks are
- * registered (typically by data stores) so that they can receive data from
- * other parts of the application (typically views and controller views). The
- * dispatcher responds to an action by receiving a payload of data and sending
- * it to every callback in the registry.
- *
- * The dispatcher can also manage dependencies between callbacks by allowing
- * them to wait for other callbacks to finish.
- *
- * Based on Facebook's todomvc-flux example project
- * https://github.com/facebook/react/blob/master/examples/todomvc-flux/js/dispatcher/Dispatcher.js
- */
-
 var Promise = Promise || require('es6-promise').Promise;
+
+// /**
+//  * Dispatcher
+//  *
+//  * The dispatcher is a centralized registry of callbacks. Callbacks are
+//  * registered (typically by data stores) so that they can receive data from
+//  * other parts of the application (typically views and controller views). The
+//  * dispatcher responds to an action by receiving a payload of data and sending
+//  * it to every callback in the registry.
+//  *
+//  * The dispatcher can also manage dependencies between callbacks by allowing
+//  * them to wait for other callbacks to finish.
+//  *
+//  * Based on Facebook's todomvc-flux example project
+//  * https://github.com/facebook/react/blob/master/examples/todomvc-flux/js/dispatcher/Dispatcher.js
+//  */
 
 class Dispatcher {
 
