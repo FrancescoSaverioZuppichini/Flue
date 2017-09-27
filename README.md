@@ -1,7 +1,11 @@
 # Flue - Flux + Vue
 ## Yep, another flux implementation
 
-Francesco Saverio Zuppichini
+[Francesco Saverio Zuppichini](https://francescozuppichini.carrd.co/ )
+
+### What it is?
+
+Flue is flux-pattern based state management library for your Vue.js applications. 
 
 ### Installation
 
@@ -15,7 +19,6 @@ import { flue } from 'flue-vue'
 
 Vue.use(flue)
 ```
-
 
 After that, *Flue*  will be available as *$store*  inside any component.
 
@@ -40,6 +43,9 @@ flue.addStores([yourStore, ...]) // add multiple
 ```
 
 ### Introduction
+Flue is flux-pattern based state management library for your Vue.js applications. 
+
+You do not know what Flux pattern is? Take a look [here](https://facebook.github.io/flux/docs/overview.html)
 
 Flue is a Object Oriented Framework that combines the Redux single state paradigm and stateless reducers into a friendly environment. It uses a Vue Virtual Machine in order to automatically make "reactive" the store's state so no binding/event emitting is needed. You take it, you put in your component and it works. 
 
