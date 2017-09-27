@@ -1,0 +1,82 @@
+#header {
+  background-image: url('../images/header_blur.png');
+  background-size: cover;
+  /* filter: blur(15px); */
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+#snippet {
+  /* position: absolute; */
+  z-index: 99;
+  height: 300px;
+  width: auto;
+  /* width: 400px; */
+  bottom: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  /* color: white !important; */
+}
+
+#main-content {
+  margin-bottom: 80px;
+}
+
+.window {
+  background-image: url('../images/window.png');
+  position: absolute;
+  height: 300px;
+  bottom: 54px;
+  width: 100%;
+  background-size: cover;
+  z-index: -1;
+  
+}
+
+#main-content>h4 {
+  font-size: 36px;
+}
+
+.f-h {
+  height: 100%;
+}
+
+.title {
+  font-size: 78px;
+}
+
+.subtitle {
+  font-size: 54px;
+}
+
+.white {
+  color: white !important;
+}
+
+.uk-h1,
+.uk-h2,
+.uk-h3,
+.uk-h4,
+.uk-h5,
+.uk-h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: white !important;
+}
+
+.my-button {
+  border: 1px solid white !important;
+  border-radius: 25px !important;
+  color: white !important;
+}

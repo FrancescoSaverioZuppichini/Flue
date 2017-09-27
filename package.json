@@ -5,7 +5,7 @@
   "main": "./distribution/index.js",
   "scripts": {
     "test": "mocha-webpack --watch ./test/test.js",
-    "build": "babel ./source/flue --presets babel-preset-es2015 --out-dir distribution",
+    "build": "babel ./source/flue/ --presets babel-preset-es2015 --out-dir distribution",
     "prepublish": "npm run build",
     "generate-docs": "jsdoc --configure .jsdoc.json --verbose"
   },
@@ -30,14 +30,18 @@
   "homepage": "https://github.com/FrancescoSaverioZuppichini/Flue#readme",
   "devDependencies": {
     "babel-cli": "^6.23.0",
-    "babel-loader": "^6.4.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^6.4.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-uglify": "^1.0.2",
     "babel-preset-es2015": "^6.22.0",
+    "compression-webpack-plugin": "^1.0.0",
     "gulp-jsdoc3": "^1.0.1",
     "minami": "^1.2.3",
     "mocha": "^3.4.2",
     "mocha-loader": "^1.1.1",
     "mocha-webpack": "^1.0.0-beta.1",
-    "webpack": "^2.6.1"
+    "webpack": "^2.7.0",
+    "webpack-bundle-analyzer": "^2.9.0"
   }
 }
