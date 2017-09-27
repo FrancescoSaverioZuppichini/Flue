@@ -30,7 +30,7 @@ export default {
 }
 ```
 
-To add a store to  the *Flue*
+To add a store to  *Flue*
 
 ```javascript
 import yourStore from './YourStore.js'
@@ -41,14 +41,15 @@ flue.addStores([yourStore, ...]) // add multiple
 
 ### Introduction
 
-Flue combines the Redux single state paradigm and stateless reducers into a friendly environment. It uses a Vue Virtual Machine in order to automatically make "reactive" the store's state so no binding/event emitting is needed. You take it, you put in your component and it works. 
+Flue is a Object Oriented Framework that combines the Redux single state paradigm and stateless reducers into a friendly environment. It uses a Vue Virtual Machine in order to automatically make "reactive" the store's state so no binding/event emitting is needed. You take it, you put in your component and it works. 
 
 ### Quick Start
-Let's show to a short example in order to introduce you to the basic concepts.
+Let's show a short example in order to introduce you to the basic concepts. This is how you create a *Store*
 
 ```javascript
 import { flue, Store } from 'flue-vue'
 
+// You need to extend the Store class
 class WelcomeToFLue extends Store {
     constructor () {
         super()
@@ -74,17 +75,18 @@ class WelcomeToFLue extends Store {
 }
 
 const welcomeToFlue = new WelcomeToFLue()
-
+// add it to flue
 flue.addStore(welcomeToFlue)
-
+// then the actions can be directly called
 flue.actions.sayWelcome() // "Welcome to Flue"
+
 console.log(flue.state.hasSaidWelcome) // true
 
 ```
 
 ## Store
 
-Each Store must be created by extending the *Store* class provided by Flue, it provides a common interface to reduce and fire actions.
+Each Store must be created by extending the *Store* class exposed by Flue, it provides a common interface to reduce and fire actions.
 
 ### State
 
@@ -98,9 +100,17 @@ constructor () {
 ```
 We initialize the state by setting `hasSaidWelcome` to `false`
 
+The state can be also passed in the constructor
+
+```javascript
+const initialState = { foo: 'foo' }
+new Store(initialState)
+```
 ### Reduce
 
-Each Store can implement the `reduce` function that receives an action as argument and switch behavior accordingly on the action's type. Usually, a *switch* statement is used. By following our example:
+Each Store can implement the `reduce` method that receives an action as argument and switch behavior accordingly on the its type. Usually, a *switch* statement is used. 
+
+By following our example:
 
 ```javascript
     reduce (action) {
@@ -112,7 +122,7 @@ Each Store can implement the `reduce` function that receives an action as argume
         })
     }
 ```
-*Store* exposes a helper function, called **reduceMap** that create a map with an actions types and function. 
+**reduceMap** can be also used to create a map with an actions types and functions. 
 
 ```javascript
     reduce (action) {
@@ -149,12 +159,12 @@ actions(ctx) {
 }
 ```
 
-This special function is fetched by the **SuperStore**  and flat into a common object in order to provide a global API interface for the components. Actions can be called directly from the *$store* pointer inside a component. Following our previous example:
+This special function is fetched by **flue**  and flat into a common object in order to provide a global API interface for the components. Actions can be called directly from the *$store* pointer inside a component. Following our previous example:
 
 ```javascript
 export default {
     \\inside a component
-    this.$store.actions.fetchDummy()
+    this.$store.actions.sayWelcome()
 }
 ```
 
@@ -171,7 +181,7 @@ const anAction = aStore.createAction('FOO', {})
 
 aStore.dispatch(anAction)
 
-//or you can use the SuperStore
+//or you can use flue
 
 import { flue } from 'flue-vue'
 
@@ -185,7 +195,7 @@ For convenience is it possible to subscribe for updates in any store. Since we a
 ```javascript
 flue.subscribe((store) => { console.log(store.state) }) \\ subscribe to the global store
 
-DummyStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a specific store
+aStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a specific store
 ```
 
 ### What else?
@@ -202,10 +212,10 @@ flue.addStore(yourStore) //now yourStore will be available
 ```
 ### Providers
 
-It may be convenient to add some external package directly into the SuperStore in order to make it available from all the stores and components. Example:
+It may be convenient to add some external package directly into Flue in order to make them available at all the stores and components. An example using [axios](https://github.com/mzabriskie/axios) a well know promised based HTTP client.
 
 ```javascript
-import axios from 'axios'
+import axios from 'axios' 
 
 flue.addProvider({ key: 'client', source: axios })
 
@@ -213,7 +223,7 @@ flue.providers.client.get(...)
 ```
 
 ## Actions
-For simplicity, we provide an **Action** class in order to simplify the syntax. Each action is composed of a type and a payload. This is mandatory if you want to use the *reduceMap* since his payload object is passed to all the functions. You can always do what you want, just do not call *reduceMap* then.
+We also provide an **Action** class. Each action is composed of a type and a payload. You can always do what you want, just do not call [*reduceMap*](Store.html#reduceMap) then.
 
 ## Middleware
 *You can use Redux middleware*. In the following example, you can see how to add the classic **redux-logger** middleware to Flue.
@@ -224,7 +234,7 @@ import Store1 from './Store1.js'
 
 import logger from 'redux-logger'
 
-flue.addStore(DummyStore)
+flue.addStore(Store1)
 flue.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all the stores
 ```
 
@@ -236,13 +246,13 @@ import Store1 from './Store1.js'
 import logger from 'redux-logger'
 import { apiMiddleware } from 'redux-api-middleware'
 
-flue.addStore(DummyStore)
+flue.addStore(Store1)
 flue.applyMiddlewareToStore(Store1, [logger]) // apply middleware to a specific store
 flue.applyMiddlewareToStores([Store1,...], [logger]) // apply middleware to an flue of stores
-superStore.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all the stores
+flue.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all the stores
 ```
 
 To create a middleware just follow the [redux tutorial](http://redux.js.org/docs/advanced/Middleware.html).
 
 ## Example
-You can check out [here](https://github.com/FrancescoSaverioZuppichini/flueVueExample) or in the **`test/examples`** folder.
+You can check out [here](https://francescosaveriozuppichini.github.io/resource-users-wall-example/) in order to see a full real-life scenario (open the console to see the logger) or in the **`test/examples`** folder.
