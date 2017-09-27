@@ -13,7 +13,6 @@ import userStore from './UserStore.js'
 
 Vue.use(flue)
 
-flue.addStores([taskStore, userStore])
 flue.applyGlobalMiddleware([logger])
 
 Vue.config.productionTip = false

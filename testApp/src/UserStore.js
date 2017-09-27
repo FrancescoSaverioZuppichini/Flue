@@ -1,5 +1,5 @@
-import {Store} from 'flue-vue'
-import {Resource} from 'resource-class'
+import { Store, flue } from 'flue-vue'
+import { Resource } from 'resource-class'
 import axios from 'axios'
 import Vue from 'vue'
 
@@ -47,4 +47,7 @@ class UserStore extends Store {
 }
 
 const userStore = new UserStore()
+
+flue.addStore(userStore)
+
 export default userStore

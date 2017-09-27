@@ -16,7 +16,7 @@ const StoreError = {
  * 
  * It represent one stand-alone source of true.
  * 
- * *Remember*: It must be added to the SuperStore by calling [.addStore](SuperStore.html#addStore)
+ * *Remember*: It must be added to flue by calling [.addStore](SuperStore.html#addStore)
  *  or [.addStores](SuperStore.html#addStores)
  * @type {Object}
  */

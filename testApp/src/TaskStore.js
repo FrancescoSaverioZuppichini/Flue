@@ -1,6 +1,6 @@
 // import { Store } from '../../source/flue/index.js'
 
-import { Store } from 'flue-vue'
+import { Store, flue } from 'flue-vue'
 
 class TaskStore extends Store {
   constructor() {
@@ -22,4 +22,7 @@ class TaskStore extends Store {
 }
 
 const taskStore = new TaskStore()
+
+flue.addStore(taskStore)
+
 export default taskStore;

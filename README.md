@@ -41,7 +41,7 @@ flue.addStores([yourStore, ...]) // add multiple
 
 ### Introduction
 
-Flue combines the Redux single state paradigm and stateless reducers into a friendly environment. It uses the Vue Virtual Machine in order to automatically make "reactive" the store's state so no binding/event emitting is needed. You take it, you put in your component and it works. 
+Flue combines the Redux single state paradigm and stateless reducers into a friendly environment. It uses a Vue Virtual Machine in order to automatically make "reactive" the store's state so no binding/event emitting is needed. You take it, you put in your component and it works. 
 
 ### Quick Start
 Let's show to a short example in order to introduce you to the basic concepts.
@@ -88,7 +88,7 @@ Each Store must be created by extending the *Store* class provided by Flue, it p
 
 ### State
 
-The state *must* be initialised into the constructor in order to make it reactive. Otherwise `Vue.set()` must be called. In our example
+The state *must* be initialised into the constructor in order to make it reactive. Otherwise `Vue.set()` must be called everytime a new entry is added into it. In our example
 
 ```javascript
 constructor () {
