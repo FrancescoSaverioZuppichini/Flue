@@ -10,7 +10,7 @@ const SuperStoreError = {
  * "One to rule them all"
  * 
  * This class is the top-level store. It manages all the state and stores in order to dispatch actions.
- * It can be see as a container for all the stores.
+ * It can be see as a container for all the stores. Flue is just a SuperStore instance.
  */
 class SuperStore extends Store {
   constructor() {
@@ -141,7 +141,7 @@ class SuperStore extends Store {
   /**
    * This function applies the given middlewares
    * to a single store
-   * Redux middlewares can be used
+   * [Redux middlewares](http://redux.js.org/docs/advanced/Middleware.html) can be used
    * @param {Store} stores A Store instance
    * @param {Array} middlewares 
    */
@@ -161,7 +161,7 @@ class SuperStore extends Store {
   /**
    * This function applies the given middlewares
    * to multiple stores
-   * Redux middlewares can be used
+   * [Redux middlewares](http://redux.js.org/docs/advanced/Middleware.html) can be used
    * @param {Array} stores An Array of Stores
    * @param {Array} middlewares 
    */
@@ -172,7 +172,7 @@ class SuperStore extends Store {
   /**
    * This function applies the given middlewares 
    * to each store.
-   * Redux middlewares can be used
+   * [Redux middlewares](http://redux.js.org/docs/advanced/Middleware.html) can be used
    * @param {Array} middlewares 
    */
   applyGlobalMiddleware(middlewares) {

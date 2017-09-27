@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Action - Documentation</title>
+    <title>index.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,214 +29,49 @@
 
 <div id="main">
     
-    <h1 class="page-title">Action</h1>
+    <h1 class="page-title">index.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        Action
-        </h2>
-        
-            <div class="class-description"><p>This class represent a Action, 
-it has a type used as unique identifier and a payload.
-By convention the type is a string in capital with underscores.
-For example, this is a valid type: A_VALID_TYPE_STRING</p></div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-<div class="section-method">
-
-    
-    <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="Action"><span class="type-signature"></span>new Action<span class="signature">(type, payload)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Action.js.html">Action.js</a>, <a href="Action.js.html#line7">line 7</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>A String that identify the type of the Action</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>payload</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>The data of the Action</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import flue from './SuperStore.js'
+import Store from './Store.js'
+import Action from './Action.js'
+import Vue from 'vue'
+
+// create the unique superstore
+
+/**
+ * Flue exposes all the classes as well as the 
+ * correct intall function to be used direcly with Vue. 
+ * 
+ * Example:
+ * Import { flue, Store, Action } from 'flue-vue'
+ * 
+ * Vue.use(flue) // Flue will be available inside each vue component
+ * in the $store field.
+ */
+
+flue.install = function(Vue, options) {
+  Vue.prototype.$store = flue
+}
+// old version
+const SuperStore = flue
+
+export {
+  flue,
+  SuperStore,
+  Store,
+  Action,
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

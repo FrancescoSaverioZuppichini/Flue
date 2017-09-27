@@ -11,13 +11,13 @@ npm install -S flue-vue
 And import in your root component.
 
 ```javascript
-import { flueVue } from 'flue-vue'
+import { flue } from 'flue-vue'
 
-Vue.use(flueVue)
+Vue.use(flue)
 ```
 
 
-After that, the basic entry point of Flue, *SuperStore*, will be available as *$store*  inside any component.
+After that, *Flue*  will be available as *$store*  inside any component.
 
 ```javascript
 //SomeVueComponent.vue
@@ -30,13 +30,13 @@ export default {
 }
 ```
 
-To add a store to  the *SuperStore*
+To add a store to  the *Flue*
 
 ```javascript
-import YourStore from './YourStore.js'
-import { SuperStore } from 'flue-vue'
-SuperStore.addStore(YourStore) // add one
-SuperStore.addStores([YourStore, ...]) // add multiple
+import yourStore from './YourStore.js'
+import { flue } from 'flue-vue'
+flue.addStore(yourStore) // add one
+flue.addStores([yourStore, ...]) // add multiple
 ```
 
 ### Introduction
@@ -47,7 +47,7 @@ Flue combines the Redux single state paradigm and stateless reducers into a frie
 Let's show to a short example in order to introduce you to the basic concepts.
 
 ```javascript
-import { Action, SuperStore, Store } from 'flue-vue'
+import { flue, Store } from 'flue-vue'
 
 class WelcomeToFLue extends Store {
     constructor () {
@@ -75,10 +75,10 @@ class WelcomeToFLue extends Store {
 
 const welcomeToFlue = new WelcomeToFLue()
 
-SuperStore.addStore(welcomeToFlue)
+flue.addStore(welcomeToFlue)
 
-SuperStore.actions.sayWelcome() // "Welcome to Flue"
-console.log(SuperStore.state.hasSaidWelcome) // true
+flue.actions.sayWelcome() // "Welcome to Flue"
+console.log(flue.state.hasSaidWelcome) // true
 
 ```
 
@@ -173,9 +173,9 @@ aStore.dispatch(anAction)
 
 //or you can use the SuperStore
 
-import { SuperStore } from 'flue-vue'
+import { flue } from 'flue-vue'
 
-SuperStore.dispatch(anAction)
+flue.dispatch(anAction)
 ```
 
 ### Subscribe
@@ -183,7 +183,7 @@ SuperStore.dispatch(anAction)
 For convenience is it possible to subscribe for updates in any store. Since we are using a promise base dispatcher, then also async operations are support and the listeners will be called at the right time. 
 
 ```javascript
-SuperStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to the global store
+flue.subscribe((store) => { console.log(store.state) }) \\ subscribe to the global store
 
 DummyStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a specific store
 ```
@@ -191,14 +191,14 @@ DummyStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a 
 ### What else?
 For more deep understanding you can read the [documentation page](Store.html) about the `Store` class.
 
-## SuperStore
-The *SuperStore*  is a container for all the stores, it fetches each individual state making reactive and sharing it back.
+## Flue
+Flue contains all the stores, it fetches each individual state making reactive and sharing it back. It is a single [*SuperStore*](SuperStore.html) instance.
 In order to add a *Store* to Flue you need to call `SuperStore.addStore` or `SuperStore.addStores`. Usually, this is done at the root of your application
 
 ```javascript
 import yourStore from './yourStore.js'
 
-SuperStore.addStore(yourStore) //now yourStore will be available
+flue.addStore(yourStore) //now yourStore will be available
 ```
 ### Providers
 
@@ -207,9 +207,9 @@ It may be convenient to add some external package directly into the SuperStore i
 ```javascript
 import axios from 'axios'
 
-SuperStore.addProvider({ key: 'client', source: axios })
+flue.addProvider({ key: 'client', source: axios })
 
-SuperStore.providers.client.get(...)
+flue.providers.client.get(...)
 ```
 
 ## Actions
@@ -219,26 +219,26 @@ For simplicity, we provide an **Action** class in order to simplify the syntax. 
 *You can use Redux middleware*. In the following example, you can see how to add the classic **redux-logger** middleware to Flue.
 
 ```javascript
-import { superStore } from 'flue-vue'
+import { flue } from 'flue-vue'
 import Store1 from './Store1.js'
 
 import logger from 'redux-logger'
 
-superStore.addStore(DummyStore)
-superStore.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all the stores
+flue.addStore(DummyStore)
+flue.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all the stores
 ```
 
 A full example that exposes all the APIs.
 ```javascript
-import { superStore } from 'flue-vue'
+import { flue } from 'flue-vue'
 import Store1 from './Store1.js'
 
 import logger from 'redux-logger'
 import { apiMiddleware } from 'redux-api-middleware'
 
-superStore.addStore(DummyStore)
-superStore.applyMiddlewareToStore(Store1, [logger]) // apply middleware to a specific store
-superStore.applyMiddlewareToStores([Store1,...], [logger]) // apply middleware to an array of stores
+flue.addStore(DummyStore)
+flue.applyMiddlewareToStore(Store1, [logger]) // apply middleware to a specific store
+flue.applyMiddlewareToStores([Store1,...], [logger]) // apply middleware to an flue of stores
 superStore.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all the stores
 ```
 

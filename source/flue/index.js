@@ -10,9 +10,9 @@ import Vue from 'vue'
  * correct intall function to be used direcly with Vue. 
  * 
  * Example:
- * Import { flueVue, superStore, Store, Action } from 'flue-vue'
+ * Import { flue, Store, Action } from 'flue-vue'
  * 
- * Vue.use(flueVue) // The superStore will be available inside each vue component
+ * Vue.use(flue) // Flue will be available inside each vue component
  * in the $store field.
  */
 
