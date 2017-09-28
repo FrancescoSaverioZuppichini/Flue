@@ -3,7 +3,7 @@ import { flue, Store } from 'flue-vue'
 
 class HelloWorld extends Store{
 
-    retuce(action){
+    reduce(action){
         console.log(action.type)
     }
 }
