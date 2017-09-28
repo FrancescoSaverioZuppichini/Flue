@@ -33,7 +33,7 @@ body {
   background-image: url('../images/window.png');
   position: absolute;
   height: 300px;
-  bottom: 54px;
+  bottom: 50px;
   width: 100%;
   background-size: cover;
   z-index: -1;
