@@ -5,7 +5,7 @@
 
 ### What it is?
 
-Flue is flux-pattern based state management library for your Vue.js applications. 
+[Flue](index.html) is flux-pattern based state management library for your Vue.js applications. 
 
 ### Installation
 
@@ -109,12 +109,12 @@ We initialize the state by setting `hasSaidWelcome` to `false`
 The state can be also passed in the constructor
 
 ```javascript
-const initialState = { foo: 'foo' }
+const initialState = { hasSaidWelcome: false }
 new Store(initialState)
 ```
 ### Reduce
 
-Each Store can implement the `reduce` method that receives an action as argument and switch behavior accordingly on the its type. Usually, a *switch* statement is used. 
+Each Store can implement the [**reduce**](Store.html#reduce) method. It receives an action as argument and switch behavior accordingly on the its type. Usually, a *switch* statement is used. 
 
 By following our example:
 
@@ -128,7 +128,7 @@ By following our example:
         })
     }
 ```
-**reduceMap** can be also used to create a map with an actions types and functions. 
+[**reduceMap**](Store.html#reduce) can be also used to create a map with an actions types and functions. 
 
 ```javascript
     reduce (action) {
@@ -207,15 +207,6 @@ aStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a spec
 ### What else?
 For more deep understanding you can read the [documentation page](Store.html) about the `Store` class.
 
-## Flue
-Flue contains all the stores, it fetches each individual state making reactive and sharing it back. It is a single [*SuperStore*](SuperStore.html) instance.
-In order to add a *Store* to Flue you need to call `SuperStore.addStore` or `SuperStore.addStores`. Usually, this is done at the root of your application
-
-```javascript
-import yourStore from './yourStore.js'
-
-flue.addStore(yourStore) //now yourStore will be available
-```
 ### Providers
 
 It may be convenient to add some external package directly into Flue in order to make them available at all the stores and components. An example using [axios](https://github.com/mzabriskie/axios) a well know promised based HTTP client.
@@ -227,9 +218,6 @@ flue.addProvider({ key: 'client', source: axios })
 
 flue.providers.client.get(...)
 ```
-
-## Actions
-We also provide an **Action** class. Each action is composed of a type and a payload. You can always do what you want, just do not call [*reduceMap*](Store.html#reduceMap) then.
 
 ## Middleware
 *You can use Redux middleware*. In the following example, you can see how to add the classic **redux-logger** middleware to Flue.
@@ -259,6 +247,27 @@ flue.applyGlobalMiddleware([apiMiddleware, logger]) // apply middlewere to all t
 ```
 
 To create a middleware just follow the [redux tutorial](http://redux.js.org/docs/advanced/Middleware.html).
+
+
+## Flue
+Flue contains all the stores, it fetches each individual state making reactive and sharing it back. It is a single [*SuperStore*](SuperStore.html) instance.
+In order to add a *Store* to Flue you need to call `SuperStore.addStore` or `SuperStore.addStores`. Usually, this is done at the root of your application
+
+```javascript
+import yourStore from './yourStore.js'
+
+flue.addStore(yourStore) //now yourStore will be available
+```
+
+## Actions
+We also provide an **Action** class. Each action is composed of a type and a payload. You can always do what you want, just do not call [*reduceMap*](Store.html#reduceMap) then.
+
+## Flue vs others
+### Redux 
+Flue was strongly imfluenced by Redux, but it has some main differences. First of all, in Flue the **state is reactive** meaning that each Vue component is automatically notified of the changes and there is no nead to subscribe to notification. Also, *stores* in Redux are created by the framework, in *Flue* the **created store** is added into it. Moreover Flue supports Redux's middlewares since it implements the same API so there is no need to reinvent the wheel, e.g create a custom logger.
+
+### Vuex
+Vuex has strong contrains that are not present in Flue. Here the developer is more free, a *Store* can be implement as prefered, there is no need to create `getters` or `mutation`. ALso, Flue allows to write a more pleasent code using ES6 classes.
 
 ## Example
 You can check out [here](https://francescosaveriozuppichini.github.io/resource-users-wall-example/) in order to see a full real-life scenario (open the console to see the logger) or in the **`test/examples`** folder.

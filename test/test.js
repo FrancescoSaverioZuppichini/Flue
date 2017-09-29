@@ -228,6 +228,16 @@ describe('flue', () => {
       }, 1100)
     })
   })
+  describe("addActions", () => {
+    it("should add an actions to flue", () => {
+      flue.addActions({ test: () => { 
+        assert.ok(true)
+        flue.dispatchAction('TEST')
+       } })
+       
+      flue.actions.test()
+    })
+  })
   describe("applyMiddleware", () => {
     it("should apply a middleware to the store", () => {
 
@@ -243,14 +253,13 @@ describe('flue', () => {
   })
   describe("subscribe", () => {
     it("should trigger a change when an action is distpached", () => {
-
-      const func = () => {
-        assert.ok(true)
-        console.log('s')
+      
+      const func = (ctx) => {
+        assert.equal(ctx.state.text, "subscribe")
       }
 
       const unsubscribe = flue.subscribe(func)
-      flue.actions.fetchDummy()
+      flue.actions.fetchDummy('subscribe')
 
     })
   })

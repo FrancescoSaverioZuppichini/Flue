@@ -45,9 +45,9 @@
         SuperStore
         </h2>
         
-            <div class="class-description"><p>&quot;One to rule them all&quot;</p>
+            <div class="class-description"><p>&quot;<em>One Store to rule them all</em>&quot;</p>
 <p>This class is the top-level store. It manages all the state and stores in order to dispatch actions.
-It can be see as a container for all the stores. Flue is just a SuperStore instance.</p></div>
+It can be seen as a container for all the stores. Flue is just a SuperStore instance.</p></div>
         
     
 </header>
@@ -166,21 +166,18 @@ It can be see as a container for all the stores. Flue is just a SuperStore insta
 
 
 <div class="description">
-    <p>This function takes a function that returns 
-an object of actions call in order to add them
-to the global store and make them available from anywhere.
+    <p>This function takes an object of actions and to add them
+to the global store making them available from anywhere.
 Example:</p>
-<pre class="prettyprint source lang-javascript"><code>
-const actionProvider = (ctx) => {
- return {
-  testActionsProvider() {
-   ctx.dispatch(new Action(&quot;TEST_ACTION_PROVIDER&quot;))
+<pre class="prettyprint source lang-javascript"><code>import { flue } from 'flue-vue'
+const actions = {
+ test() {
+   flue.dispatch(new Action(&quot;TEST_ACTION&quot;))
   }
- }
 }
 
-superStore.addActions(actionProvider)
-superStore.actions.testActionsProvider()</code></pre>
+flue.addActions(actions)
+flue.actions.test()</code></pre>
 </div>
 
 
@@ -216,7 +213,7 @@ superStore.actions.testActionsProvider()</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line53">line 53</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -317,7 +314,7 @@ superStore.actions.testActionsProvider()</code></pre>
 <div class="description">
     <p>Copy all the store's action, if any. 
 This is done automatically when a new store is added 
-using SuperStore.addStore(Store)</p>
+using flye.addStore(Store)</p>
 </div>
 
 
@@ -353,7 +350,7 @@ using SuperStore.addStore(Store)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line63">line 63</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -496,7 +493,7 @@ flue.providers.client.get(...)</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line200">line 200</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line196">line 196</a>
     </li></ul></dd>
     
 
@@ -599,7 +596,7 @@ flue.providers.client.get(...)</code></pre>
 will be created and its reduce function overrided
 Example:</p>
 <p>var reducer = (action) =&gt; { console.log(action.type) }
-superStore.addReducer(reducer)</p>
+flue.addReducer(reducer)</p>
 </div>
 
 
@@ -635,7 +632,7 @@ superStore.addReducer(reducer)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line132">line 132</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line128">line 128</a>
     </li></ul></dd>
     
 
@@ -734,7 +731,7 @@ superStore.addReducer(reducer)</p>
 
 
 <div class="description">
-    <p>This function add Store to the global SuperStore,
+    <p>This function add Store to the global flue instance,
 under the hood it override the state pointer of each store with the
 global one</p>
 </div>
@@ -772,7 +769,7 @@ global one</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line95">line 95</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -907,7 +904,7 @@ global one</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line85">line 85</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -1044,7 +1041,7 @@ to each store.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line178">line 178</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -1181,7 +1178,7 @@ to a single store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line148">line 148</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -1344,7 +1341,7 @@ to multiple stores
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line168">line 168</a>
+        <a href="SuperStore.js.html">SuperStore.js</a>, <a href="SuperStore.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -1474,7 +1471,7 @@ to multiple stores
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Sep 27 2017 20:08:29 GMT+0200 (CEST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Sep 28 2017 19:33:23 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
