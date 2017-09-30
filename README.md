@@ -197,7 +197,7 @@ flue.dispatch(anAction)
 
 ### Getters
 
-Sometimes it may be usefull to get stuff out of a store. *Flue* will be loooking for the `name` field in each store you add to it to its `refs` field that can be used inside the client to **directly** access a single accessed Store. 
+Sometimes it may be useful to get stuff out of a store. *Flue* will be loooking for the `name` field in each store you add to it to its `refs` field that can be used inside the client to **directly** access a single accessed Store. 
 
 ```javascript
 class UserStore extends Store {
