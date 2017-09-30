@@ -202,14 +202,14 @@ Sometimes it may be usefull to get stuff out of a store. *Flue* will be loooking
 ```javascript
 class UserStore extends Store {
     
-    getUserGreaterThan(age){
+    getUsersGreaterThan(age){
         return this.state.users.fielder(user => user.age >= age )
     }
 }
 
 flue.addStore(new UserStore({ name: 'user' }))
 
-flue.refs.user.getUserGreaterThan(18)
+flue.refs.user.getUsersGreaterThan(18)
 ```
 
 You can also directly set the `name` field inside the `constructor`.
