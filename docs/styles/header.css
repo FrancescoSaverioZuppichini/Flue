@@ -1,6 +1,8 @@
 #header {
-  background-image: url('../images/header_blur.png');
+  background-image: url('../images/header_blur.png') !important;
   background-size: cover;
+  /* background-color: rgb(7,69,109); */
+  background: linear-gradient(rgb(7,69,109),black);
   /* filter: blur(15px); */
   position: absolute;
   height: 100%;
@@ -30,7 +32,7 @@ body {
 }
 
 .window {
-  background-image: url('../images/window.png');
+  background-image: url('../images/window.png');  
   position: absolute;
   height: 300px;
   bottom: 50px;
