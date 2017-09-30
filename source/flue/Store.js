@@ -28,7 +28,7 @@ class Store {
    * ```javascript
    * flue.addStore(new Store({ name: 'myStore' }))
    * // then it can be called from vue 
-   * flue.stores.myStore
+   * flue.refs.myStore
    * ```
    * At creation, the initial state can be passed to the Store directly.
    * @param {Object} config Configuration of the store 
