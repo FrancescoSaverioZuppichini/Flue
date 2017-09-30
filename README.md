@@ -7,6 +7,7 @@
 
 [Flue](index.html) is flux-pattern based state management library for your Vue.js applications. 
 
+Be awere that **Flue** is still in Beta. Any feedback/comment about it are appreciated.
 ### Installation
 
 ```bash
@@ -110,7 +111,7 @@ The state can be also passed in the constructor
 
 ```javascript
 const initialState = { hasSaidWelcome: false }
-new Store(initialState)
+new Store({ initialState })
 ```
 ### Reduce
 
@@ -194,6 +195,25 @@ import { flue } from 'flue-vue'
 flue.dispatch(anAction)
 ```
 
+### Getters
+
+Sometimes it may be usefull to get stuff out of a store. *Flue* will be loooking for the `name` field in each store you add to it to its `refs` field that can be used inside the client to **directly** access a single accessed Store. 
+
+```javascript
+class UserStore extends Store {
+    
+    getUserGreaterThan(age){
+        return this.state.users.fielder(user => user.age >= age )
+    }
+}
+
+flue.addStore(new UserStore({ name: 'user' }))
+
+flue.refs.user.getUserGreaterThan(18)
+```
+
+You can also directly set the `name` field inside the `constructor`.
+
 ### Subscribe
 
 For convenience is it possible to subscribe for updates in any store. Since we are using a promise base dispatcher, then also async operations are support and the listeners will be called at the right time. 
@@ -220,7 +240,7 @@ flue.providers.client.get(...)
 ```
 
 ## Middleware
-*You can use Redux middleware*. In the following example, you can see how to add the classic **redux-logger** middleware to Flue.
+**You can use Redux middleware**. In the following example, you can see how to add the classic **redux-logger** middleware to Flue.
 
 ```javascript
 import { flue } from 'flue-vue'
@@ -264,10 +284,11 @@ We also provide an **Action** class. Each action is composed of a type and a pay
 
 ## Flue vs others
 ### Redux 
-Flue was strongly imfluenced by Redux, but it has some main differences. First of all, in Flue the **state is reactive** meaning that each Vue component is automatically notified of the changes and there is no nead to subscribe to notification. Also, *stores* in Redux are created by the framework, in *Flue* the **created store** is added into it. Moreover Flue supports Redux's middlewares since it implements the same API so there is no need to reinvent the wheel, e.g create a custom logger.
-
+Flue was strongly influenced by Redux, but it has some main differences. First of all, in Flue the **state is reactive** meaning that each Vue component is automatically notified of the changes and there is no need to subscribe to notifications. Also, *stores* in Redux are created by the framework, in *Flue* the **created store** is added into it. Moreover, Flue supports Redux's middlewares since it implements the same API so there is no need to reinvent the wheel, e.g create a custom logger.
 ### Vuex
-Vuex has strong contrains that are not present in Flue. Here the developer is more free, a *Store* can be implement as prefered, there is no need to create `getters` or `mutation`. ALso, Flue allows to write a more pleasent code using ES6 classes.
+Vuex has a strong set of constrains that are not present in Flue. Here the developer is freer, a *Store* can be implemented as preferred, there is no need to create `getters` or `mutation`. ALso, Flue allows writing a more pleasant code using ES6 classes.
 
 ## Example
 You can check out [here](https://francescosaveriozuppichini.github.io/resource-users-wall-example/) in order to see a full real-life scenario (open the console to see the logger) or in the **`test/examples`** folder.
+
+

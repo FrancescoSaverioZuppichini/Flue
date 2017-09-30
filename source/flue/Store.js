@@ -21,8 +21,21 @@ const StoreError = {
  * @type {Object}
  */
 class Store {
-  constructor(initialState = {}) {
+  /**
+   * A name can be added to the store to make it referenceable from flue.
+   * E.g
+   * 
+   * ```javascript
+   * flue.addStore(new Store({ name: 'myStore' }))
+   * // then it can be called from vue 
+   * flue.stores.myStore
+   * ```
+   * At creation, the initial state can be passed to the Store directly.
+   * @param {Object} config Configuration of the store 
+   */
+  constructor({ initialState = {}, name } = {}) {
     this.state = initialState
+    this.name = name 
     this._dispatcher = null
     this.listeners = []
   }

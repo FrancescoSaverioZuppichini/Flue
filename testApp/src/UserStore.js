@@ -7,6 +7,11 @@ class UserStore extends Store {
   constructor() {
     super()
     this.state.users = new Resource()
+    this.name = 'user'
+  }
+
+  getUserEmail( user ) {
+    return user.email
   }
 
   onGetUsersSuccess({data}) {

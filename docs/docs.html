@@ -50,6 +50,7 @@
     <section class="readme">
         <article><h1>Flue - Flux + Vue</h1><h2>Yep, another flux implementation</h2><p><a href="https://francescozuppichini.carrd.co/">Francesco Saverio Zuppichini</a></p>
 <h3>What it is?</h3><p><a href="index.html">Flue</a> is flux-pattern based state management library for your Vue.js applications. </p>
+<p>Be awere that <strong>Flue</strong> is still in Beta. Any feedback/comment about it are appreciated.</p>
 <h3>Installation</h3><pre class="prettyprint source lang-bash"><code>npm install -S flue-vue</code></pre><p>And import in your root component.</p>
 <pre class="prettyprint source lang-javascript"><code>import { flue } from 'flue-vue'
 
@@ -110,7 +111,7 @@ console.log(flue.state.hasSaidWelcome) // true</code></pre><h2>Store</h2><p>Each
 }</code></pre><p>We initialize the state by setting <code>hasSaidWelcome</code> to <code>false</code></p>
 <p>The state can be also passed in the constructor</p>
 <pre class="prettyprint source lang-javascript"><code>const initialState = { hasSaidWelcome: false }
-new Store(initialState)</code></pre><h3>Reduce</h3><p>Each Store can implement the <a href="Store.html#reduce"><strong>reduce</strong></a> method. It receives an action as argument and switch behavior accordingly on the its type. Usually, a <em>switch</em> statement is used. </p>
+new Store({ initialState })</code></pre><h3>Reduce</h3><p>Each Store can implement the <a href="Store.html#reduce"><strong>reduce</strong></a> method. It receives an action as argument and switch behavior accordingly on the its type. Usually, a <em>switch</em> statement is used. </p>
 <p>By following our example:</p>
 <pre class="prettyprint source lang-javascript"><code>    reduce (action) {
         switch (action.type) {
@@ -157,7 +158,18 @@ aStore.dispatch(anAction)
 
 import { flue } from 'flue-vue'
 
-flue.dispatch(anAction)</code></pre><h3>Subscribe</h3><p>For convenience is it possible to subscribe for updates in any store. Since we are using a promise base dispatcher, then also async operations are support and the listeners will be called at the right time. </p>
+flue.dispatch(anAction)</code></pre><h3>Getters</h3><p>Sometimes it may be usefull to get stuff out of a store. <em>Flue</em> will be loooking for the <code>name</code> field in each store you add to it to its <code>refs</code> field that can be used inside the client to <strong>directly</strong> access a single accessed Store. </p>
+<pre class="prettyprint source lang-javascript"><code>class UserStore extends Store {
+
+    getUserGreaterThan(age){
+        return this.state.users.fielder(user => user.age >= age )
+    }
+}
+
+flue.addStore(new UserStore({ name: 'user' }))
+
+flue.refs.user.getUserGreaterThan(18)</code></pre><p>You can also directly set the <code>name</code> field inside the <code>constructor</code>.</p>
+<h3>Subscribe</h3><p>For convenience is it possible to subscribe for updates in any store. Since we are using a promise base dispatcher, then also async operations are support and the listeners will be called at the right time. </p>
 <pre class="prettyprint source lang-javascript"><code>flue.subscribe((store) => { console.log(store.state) }) \\ subscribe to the global store
 
 aStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a specific store</code></pre><h3>What else?</h3><p>For more deep understanding you can read the <a href="Store.html">documentation page</a> about the <code>Store</code> class.</p>
@@ -166,7 +178,7 @@ aStore.subscribe((store) => { console.log(store.state) }) \\ subscribe to a spec
 
 flue.addProvider({ key: 'client', source: axios })
 
-flue.providers.client.get(...)</code></pre><h2>Middleware</h2><p><em>You can use Redux middleware</em>. In the following example, you can see how to add the classic <strong>redux-logger</strong> middleware to Flue.</p>
+flue.providers.client.get(...)</code></pre><h2>Middleware</h2><p><strong>You can use Redux middleware</strong>. In the following example, you can see how to add the classic <strong>redux-logger</strong> middleware to Flue.</p>
 <pre class="prettyprint source lang-javascript"><code>import { flue } from 'flue-vue'
 import Store1 from './Store1.js'
 
@@ -189,8 +201,8 @@ In order to add a <em>Store</em> to Flue you need to call <code>SuperStore.addSt
 <pre class="prettyprint source lang-javascript"><code>import yourStore from './yourStore.js'
 
 flue.addStore(yourStore) //now yourStore will be available</code></pre><h2>Actions</h2><p>We also provide an <strong>Action</strong> class. Each action is composed of a type and a payload. You can always do what you want, just do not call <a href="Store.html#reduceMap"><em>reduceMap</em></a> then.</p>
-<h2>Flue vs others</h2><h3>Redux</h3><p>Flue was strongly imfluenced by Redux, but it has some main differences. First of all, in Flue the <strong>state is reactive</strong> meaning that each Vue component is automatically notified of the changes and there is no nead to subscribe to notification. Also, <em>stores</em> in Redux are created by the framework, in <em>Flue</em> the <strong>created store</strong> is added into it. Moreover Flue supports Redux's middlewares since it implements the same API so there is no need to reinvent the wheel, e.g create a custom logger.</p>
-<h3>Vuex</h3><p>Vuex has strong contrains that are not present in Flue. Here the developer is more free, a <em>Store</em> can be implement as prefered, there is no need to create <code>getters</code> or <code>mutation</code>. ALso, Flue allows to write a more pleasent code using ES6 classes.</p>
+<h2>Flue vs others</h2><h3>Redux</h3><p>Flue was strongly influenced by Redux, but it has some main differences. First of all, in Flue the <strong>state is reactive</strong> meaning that each Vue component is automatically notified of the changes and there is no need to subscribe to notifications. Also, <em>stores</em> in Redux are created by the framework, in <em>Flue</em> the <strong>created store</strong> is added into it. Moreover, Flue supports Redux's middlewares since it implements the same API so there is no need to reinvent the wheel, e.g create a custom logger.</p>
+<h3>Vuex</h3><p>Vuex has a strong set of constrains that are not present in Flue. Here the developer is freer, a <em>Store</em> can be implemented as preferred, there is no need to create <code>getters</code> or <code>mutation</code>. ALso, Flue allows writing a more pleasant code using ES6 classes.</p>
 <h2>Example</h2><p>You can check out <a href="https://francescosaveriozuppichini.github.io/resource-users-wall-example/">here</a> in order to see a full real-life scenario (open the console to see the logger) or in the <strong><code>test/examples</code></strong> folder.</p></article>
     </section>
 
@@ -204,7 +216,7 @@ flue.addStore(yourStore) //now yourStore will be available</code></pre><h2>Actio
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Sep 28 2017 19:33:23 GMT+0200 (CEST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Sep 30 2017 14:29:08 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -39,6 +39,7 @@ class DummyStore extends Store {
   constructor() {
     super()
     this.state.text = "ciao"
+    this.name = 'dummyStore'
   }
 
   reduce(action) {
@@ -181,6 +182,7 @@ describe('flue', () => {
   describe("addStore", () => {
     it("should add a Store to itself", () => {
       flue.addStore(dummyStore)
+      assert.ok(flue.refs['dummyStore'] !== undefined)
       assert.equal(flue.state.text, dummyStore.state.text)
       assert.ok(flue.this === dummyStore.sSuper)
       assert.notEqual(dummyStore._dispachToken, null)

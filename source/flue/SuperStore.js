@@ -19,6 +19,7 @@ class SuperStore extends Store {
     this.actions = {}
     this.providers = {}
     this.stores = []
+    this.refs = {}
     this.initialize()
   }
 
@@ -108,11 +109,11 @@ class SuperStore extends Store {
     store.flue = this  
     store.sStore = this    
     store.$store = this    
-    
     // also directly store providers to fast access
     store.providers = this.providers
     // save the store
     this.stores.push(store)
+    this.refs[store.name] = store
   }
 
   /**

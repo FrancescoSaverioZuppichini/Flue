@@ -19,7 +19,11 @@
     </ul>
       <button @click="$store.actions.addTask('test')">TASK</button>
       <button @click="$store.actions.getUsers()">Users</button>
-      <!-- {{$store.state.users.data}} -->
+
+      <div v-for="user in $store.state.users.data" :key="user.email">
+        {{user.name.first}}
+        {{$store.refs.user.getUserEmail(user)}}
+      </div>
 
   </div>
 </template>
