@@ -8,5 +8,5 @@ class HelloWorld extends Store{
     }
 }
 
-flue.addStore(HelloWorld)
+flue.addStore(new HelloWorld())
 
